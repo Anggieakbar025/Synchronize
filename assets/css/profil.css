@@ -1,0 +1,10 @@
+img-profil {
+    width: 20px;
+    height: 20px;
+}
+img {
+    border-radius: 20vh;
+    margin-left: 35%;
+    max-width: 30%;
+    max-height: 30%;
+}

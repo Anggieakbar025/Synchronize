@@ -1,16 +1,29 @@
+<?php 
+	foreach ($konten as $main ) {
+		$logo = $main['logo_event'];
+		$about = $main['about_event'];
+		$venue = $main['venue'];
+		$location = $main['location_venue'];
+	}
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
 	<meta charset="utf-8">
+	<!-- Favicons -->
+	<link href="<?= base_url(); ?>assets/img/default.png" type="image/png" rel="icon">
+	<link href="<?= base_url(); ?>assets/img/default.png" type="image/png" rel="apple-touch-icon">
+	<link href="<?= base_url(); ?>assets/fontawesome/css/all.css" rel="stylesheet">
+	<!--load all styles -->
 	<title>Syncronize</title>
 	<meta content="width=device-width, initial-scale=1.0" name="viewport">
 	<meta content="" name="keywords">
 	<meta content="" name="description">
 
-	<!-- Favicons -->
-	<link href="<?= base_url(); ?>assets/img/favicon.png" rel="icon">
-	<link href="<?= base_url(); ?>assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
 	<!-- Google Fonts -->
 	<!-- <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i|Raleway:300,400,500,700,800" rel="stylesheet"> -->
@@ -44,11 +57,8 @@
 		<div class="container">
 
 			<div id="logo" class="pull-left">
-				<!-- Uncomment below if you prefer to use a text logo -->
-				<!-- <h1><a href="#main">C<span>o</span>nf</a></h1>-->
 				<a href="#intro" class="scrollto">
-					<!-- <img src="<?//= base_url(); ?>assets/img/logo.png" alt="" title=""> -->
-					<h1> <i>(Logo)</i></h1>
+					<img src="<?= base_url(); ?>assets/img/logo/logo sync white.png" alt="" title="">
 				</a>
 			</div>
 
@@ -56,13 +66,39 @@
 				<ul class="nav-menu">
 					<li><a href="#intro">Home</a></li>
 					<li class="about"><a href="#about">About</a></li>
-					<li><a href="#speakers">Line Up</a></li>
+					<li><a href="#lineup">Line Up</a></li>
 					<li><a href="#schedule">Schedule</a></li>
 					<li><a href="#venue">Venue</a></li>
-					<li><a href="#gallery">Gallery</a></li>
+					<li><a href="#history">History</a></li>
 					<li><a href="#supporters">Sponsors</a></li>
 					<li><a href="#footer">Contact</a></li>
-					<li class="buy-tickets"><a href="#buy-tickets">Buy Tickets</a></li>
+					<li>
+						<a data-toggle="dropdown">
+							<i class="fa fa-user"></i>
+						</a>
+						<?php if (!isset($_SESSION['logged_in'])) { ?>
+						<ul class="profil">
+							<li>
+								<a href="<?= base_url('login') ?>" class="btn btn-outline-danger">
+									LOGIN
+								</a>
+							</li>
+						</ul>
+						<?php } else { ?>
+						<ul class="profil">
+							<li>
+								<a href="<?= base_url('home/profil') ?>">
+									<i class="feather icon-user"></i> Profile
+								</a>
+							</li>
+							<li>
+								<a href="<?= base_url('login/logout') ?>">
+									<i class="feather icon-log-out"></i> Logout
+								</a>
+							</li>
+						</ul>
+						<?php } ?>
+					</li>
 				</ul>
 			</nav><!-- #nav-menu-container -->
 		</div>
@@ -73,7 +109,7 @@
   	============================-->
 	<section id="intro">
 		<div class="intro-container wow fadeIn">
-			<h1 class="mb-4 pb-0"><span>Oh! Nais</span> Festival</h1>
+			<img class="pb-0 event-img" src="<?= base_url(); ?>assets/img/logo/<?= $logo; ?>" alt="" title="">
 			<p class="mb-4 pb-0">21 Februari 2019, Graha Cakrawala Universitas Negeri Malang</p>
 			<a href="#" class="venobox play-btn mb-4" data-vbtype="video" data-autoplay="true"></a>
 			<a href="#about" class="about-btn scrollto">About The Event</a>
@@ -82,24 +118,25 @@
 
 
 	<main id="main">
-	<!--==========================
+
+		<!--==========================
       About Section
     ============================-->
 		<section id="about">
-			<div class="container">
+			<div class="container wow fadeInUp">
 				<div class="row">
-					<div class="col-lg-6">
+					<div class="col-lg-1"></div>
+					<div class="col-lg-5 pl-4">
 						<h2>About The Event</h2>
-						<p>Festival musik yang dipadukan dengan berbagai rangkaian acara yang dikemas secara
-							seru dan unik.</p>
+						<p><?= $about; ?></p>
 					</div>
-					<div class="col-lg-3">
+					<div class="col-lg-3 pl-4">
 						<h3>Where</h3>
-						<p>Graha Cakrawala - Malang</p>
+						<p><?= $venue; ?></p>
 					</div>
-					<div class="col-lg-3">
+					<div class="col-lg-3 pl-4">
 						<h3>When</h3>
-						<p>Friday<br>21 Februari 2020</p>
+						<p>Friday,<br>21 Februari 2020</p>
 					</div>
 				</div>
 			</div>
@@ -108,7 +145,7 @@
 		<!--==========================
       Line Up Section
   	  ============================-->
-		<section id="speakers" class="wow fadeInUp">
+		<section id="lineup" class="wow fadeInUp">
 			<div class="container">
 				<div class="section-header">
 					<h2>line up</h2>
@@ -116,15 +153,16 @@
 				</div>
 
 				<div class="row">
+					<?php foreach ($guest as $gs) : ?>
 					<div class="col-lg-4 col-md-6">
-						<div class="speaker">
-							<a href="<?= base_url('home/lineup'); ?>">
+						<div class="guest">
+							<a href="<?= base_url(); ?>home/lineup/<?= $gs['id_guest'] ?>">
 								<img src="<?= base_url(); ?>assets/img/default.png" alt="Speaker 1"
 									class="img-fluid-guest">
 							</a>
 							<div class="details">
-								<h3><a href="<?= base_url('home/lineup'); ?>">Arditho Pramono</a></h3>
-								<p>Musician</p>
+								<h3><a href="<?= base_url('home/lineup'); ?>"><?= $gs['nama_guest']; ?></a></h3>
+								<p><?= $gs['genre']; ?></p>
 								<div class="social">
 									<a href=""><i class="fa fa-twitter"></i></a>
 									<a href=""><i class="fa fa-facebook"></i></a>
@@ -134,36 +172,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-lg-4 col-md-6">
-						<div class="speaker">
-							<img src="<?= base_url(); ?>assets/img/default.png" alt="Speaker 2" class="img-fluid-guest">
-							<div class="details">
-								<h3><a href="<?= base_url('home/lineup'); ?>">Feby Putri</a></h3>
-								<p>Women Soloist</p>
-								<div class="social">
-									<a href=""><i class="fa fa-twitter"></i></a>
-									<a href=""><i class="fa fa-facebook"></i></a>
-									<a href=""><i class="fa fa-google-plus"></i></a>
-									<a href=""><i class="fa fa-linkedin"></i></a>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-lg-4 col-md-6">
-						<div class="speaker">
-							<img src="<?= base_url(); ?>assets/img/default.png" alt="Speaker 3" class="img-fluid-guest">
-							<div class="details">
-								<h3><a href="<?= base_url('home/lineup'); ?>">Denny Cak-Nan</a></h3>
-								<p>Musician</p>
-								<div class="social">
-									<a href=""><i class="fa fa-twitter"></i></a>
-									<a href=""><i class="fa fa-facebook"></i></a>
-									<a href=""><i class="fa fa-google-plus"></i></a>
-									<a href=""><i class="fa fa-linkedin"></i></a>
-								</div>
-							</div>
-						</div>
-					</div>
+					<?php endforeach; ?>
 				</div>
 			</div>
 
@@ -172,6 +181,10 @@
 		<!--==========================
       Schedule Section
     ============================-->
+
+
+
+
 		<section id="schedule" class="section-with-bg">
 			<div class="container wow fadeInUp">
 				<div class="section-header">
@@ -180,195 +193,47 @@
 				</div>
 
 				<ul class="nav nav-tabs" role="tablist">
+					<?php foreach ($jadwal as $j) : ?>
 					<li class="nav-item">
-						<a class="nav-link active" href="#day-1" role="tab" data-toggle="tab">Day 1</a>
+						<a class="nav-link" href="#day-<?= $j['id_jadwal'] ?>" role="tab" data-toggle="tab"
+							aria-selected="true">Day <?= $j['hari'] ?></a>
 					</li>
-					<!-- <li class="nav-item">
-						<a class="nav-link" href="#day-2" role="tab" data-toggle="tab">Day 2</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="#day-3" role="tab" data-toggle="tab">Day 3</a>
-					</li> -->
+					<?php endforeach; ?>
 				</ul>
 
-
-
 				<div class="tab-content row justify-content-center">
-
+					<?php foreach ($jadwal as $j ) : ?>
 					<!-- Schdule Day 1 -->
-					<div role="tabpanel" class="col-lg-9 tab-pane fade show active" id="day-1">
+					<div role="tabpanel" class="col-lg-9 tab-pane fade" id="day-<?= $j['id_jadwal'] ?>">
 
+						<?php foreach ($detail_jadwal as $dj ) {
+						if ($j['id_jadwal'] == $dj['id_jadwal']) {
+							if ($dj['gambar'] == null) { ?>
+								<div class="row schedule-item">
+									<div class="col-md-2 mt-3"><time><?= $dj['waktu']; ?></time></div>
+									<div class="col-md-10">
+										<h4><?= $dj['kegiatan']; ?></h4>
+										<p><?= $dj['deskripsi_kegiatan']; ?></p>
+									</div>
+								</div>
+						<?php } else { ?>
 						<div class="row schedule-item">
-							<div class="col-md-2"><time><i>Waktu</i></time></div>
+							<div class="col-md-2 mt-3"><time><?= $dj['waktu']; ?></time></div>
 							<div class="col-md-10">
-								<h4><i>Kegiatan</i></h4>
-								<p><i>Deskripsi Kegiatan</i></p>
+								<div class="guest">
+									<img class="" src="<?= base_url(); ?>assets/img/default.png">
+								</div>
+								<h4><?= $dj['kegiatan']; ?></h4>
+								<p><?= $dj['deskripsi_kegiatan']; ?></p>
 							</div>
 						</div>
-
-						<div class="row schedule-item">
-							<div class="col-md-2"><time><i>Waktu</i></time></div>
-							<div class="col-md-10">
-								<div class="speaker">
-									<img src="<?= base_url(); ?>assets/img/default.png">
-								</div>
-								<div class="mt-2">
-									<h4><i>Nama Guest</i></h4>
-								</div>
-								<p><i>(Deskripsi Kegiatan)</i></p>
-							</div>
-						</div>
+						<?php } } }	 ?>
 					</div>
+
 					<!-- End Schdule Day 1 -->
-
-					<!-- Schdule Day 2 -->
-					<!-- <div role="tabpanel" class="col-lg-9  tab-pane fade" id="day-2">
-
-						<div class="row schedule-item">
-							<div class="col-md-2"><time>10:00 AM</time></div>
-							<div class="col-md-10">
-								<div class="speaker">
-									<img src="<?= base_url(); ?>assets/img/speakers/1.jpg" alt="Brenden Legros">
-								</div>
-								<h4>Libero corrupti explicabo itaque. <span>Brenden Legros</span></h4>
-								<p>Facere provident incidunt quos voluptas.</p>
-							</div>
-						</div>
-
-						<div class="row schedule-item">
-							<div class="col-md-2"><time>11:00 AM</time></div>
-							<div class="col-md-10">
-								<div class="speaker">
-									<img src="<?= base_url(); ?>assets/img/speakers/2.jpg" alt="Hubert Hirthe">
-								</div>
-								<h4>Et voluptatem iusto dicta nobis. <span>Hubert Hirthe</span></h4>
-								<p>Maiores dignissimos neque qui cum accusantium ut sit sint inventore.</p>
-							</div>
-						</div>
-
-						<div class="row schedule-item">
-							<div class="col-md-2"><time>12:00 AM</time></div>
-							<div class="col-md-10">
-								<div class="speaker">
-									<img src="<?= base_url(); ?>assets/img/speakers/3.jpg" alt="Cole Emmerich">
-								</div>
-								<h4>Explicabo et rerum quis et ut ea. <span>Cole Emmerich</span></h4>
-								<p>Veniam accusantium laborum nihil eos eaque accusantium aspernatur.</p>
-							</div>
-						</div>
-
-						<div class="row schedule-item">
-							<div class="col-md-2"><time>02:00 PM</time></div>
-							<div class="col-md-10">
-								<div class="speaker">
-									<img src="<?= base_url(); ?>assets/img/speakers/4.jpg" alt="Jack Christiansen">
-								</div>
-								<h4>Qui non qui vel amet culpa sequi. <span>Jack Christiansen</span></h4>
-								<p>Nam ex distinctio voluptatem doloremque suscipit iusto.</p>
-							</div>
-						</div>
-
-						<div class="row schedule-item">
-							<div class="col-md-2"><time>03:00 PM</time></div>
-							<div class="col-md-10">
-								<div class="speaker">
-									<img src="<?= base_url(); ?>assets/img/speakers/5.jpg" alt="Alejandrin Littel">
-								</div>
-								<h4>Quos ratione neque expedita asperiores. <span>Alejandrin Littel</span></h4>
-								<p>Eligendi quo eveniet est nobis et ad temporibus odio quo.</p>
-							</div>
-						</div>
-
-						<div class="row schedule-item">
-							<div class="col-md-2"><time>04:00 PM</time></div>
-							<div class="col-md-10">
-								<div class="speaker">
-									<img src="<?= base_url(); ?>assets/img/speakers/6.jpg" alt="Willow Trantow">
-								</div>
-								<h4>Quo qui praesentium nesciunt <span>Willow Trantow</span></h4>
-								<p>Voluptatem et alias dolorum est aut sit enim neque veritatis.</p>
-							</div>
-						</div>
-
-					</div> -->
-					<!-- End Schdule Day 2 -->
-
-					<!-- Schdule Day 3 -->
-					<!-- <div role="tabpanel" class="col-lg-9  tab-pane fade" id="day-3">
-
-						<div class="row schedule-item">
-							<div class="col-md-2"><time>10:00 AM</time></div>
-							<div class="col-md-10">
-								<div class="speaker">
-									<img src="<?= base_url(); ?>assets/img/speakers/2.jpg" alt="Hubert Hirthe">
-								</div>
-								<h4>Et voluptatem iusto dicta nobis. <span>Hubert Hirthe</span></h4>
-								<p>Maiores dignissimos neque qui cum accusantium ut sit sint inventore.</p>
-							</div>
-						</div>
-
-						<div class="row schedule-item">
-							<div class="col-md-2"><time>11:00 AM</time></div>
-							<div class="col-md-10">
-								<div class="speaker">
-									<img src="<?= base_url(); ?>assets/img/speakers/3.jpg" alt="Cole Emmerich">
-								</div>
-								<h4>Explicabo et rerum quis et ut ea. <span>Cole Emmerich</span></h4>
-								<p>Veniam accusantium laborum nihil eos eaque accusantium aspernatur.</p>
-							</div>
-						</div>
-
-						<div class="row schedule-item">
-							<div class="col-md-2"><time>12:00 AM</time></div>
-							<div class="col-md-10">
-								<div class="speaker">
-									<img src="<?= base_url(); ?>assets/img/speakers/1.jpg" alt="Brenden Legros">
-								</div>
-								<h4>Libero corrupti explicabo itaque. <span>Brenden Legros</span></h4>
-								<p>Facere provident incidunt quos voluptas.</p>
-							</div>
-						</div>
-
-						<div class="row schedule-item">
-							<div class="col-md-2"><time>02:00 PM</time></div>
-							<div class="col-md-10">
-								<div class="speaker">
-									<img src="<?= base_url(); ?>assets/img/speakers/4.jpg" alt="Jack Christiansen">
-								</div>
-								<h4>Qui non qui vel amet culpa sequi. <span>Jack Christiansen</span></h4>
-								<p>Nam ex distinctio voluptatem doloremque suscipit iusto.</p>
-							</div>
-						</div>
-
-						<div class="row schedule-item">
-							<div class="col-md-2"><time>03:00 PM</time></div>
-							<div class="col-md-10">
-								<div class="speaker">
-									<img src="<?= base_url(); ?>assets/img/speakers/5.jpg" alt="Alejandrin Littel">
-								</div>
-								<h4>Quos ratione neque expedita asperiores. <span>Alejandrin Littel</span></h4>
-								<p>Eligendi quo eveniet est nobis et ad temporibus odio quo.</p>
-							</div>
-						</div>
-
-						<div class="row schedule-item">
-							<div class="col-md-2"><time>04:00 PM</time></div>
-							<div class="col-md-10">
-								<div class="speaker">
-									<img src="<?= base_url(); ?>assets/img/speakers/6.jpg" alt="Willow Trantow">
-								</div>
-								<h4>Quo qui praesentium nesciunt <span>Willow Trantow</span></h4>
-								<p>Voluptatem et alias dolorum est aut sit enim neque veritatis.</p>
-							</div>
-						</div>
-
-					</div> -->
-					<!-- End Schdule Day 2 -->
-
+					<?php endforeach; ?>
 				</div>
-
 			</div>
-
 		</section>
 
 		<!--==========================
@@ -385,63 +250,19 @@
 
 				<div class="row no-gutters">
 					<div class="col-lg-6 venue-map">
-						<iframe
-							src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d12097.433213460943!2d-74.0062269!3d40.7101282!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xb89d1fe6bc499443!2sDowntown+Conference+Center!5e0!3m2!1smk!2sbg!4v1539943755621"
-							frameborder="0" style="border:0" allowfullscreen></iframe>
+						<iframe src="<?= $location; ?>" frameborder="0" style="border:0" allowfullscreen></iframe>
 					</div>
 
 					<div class="col-lg-6 venue-info">
 						<div class="row justify-content-center">
 							<div class="col-11 col-lg-8">
-								<h3>Graha Cakrawala, Malang</h3>
+								<h3><?= $venue; ?></h3>
 								<p>Gedung Graha Cakrawala Universitas Negeri Malang</p>
 							</div>
 						</div>
 					</div>
 				</div>
 
-			</div>
-
-			<div class="container-fluid venue-gallery-container">
-				<div class="row no-gutters">
-
-					<div class="col-lg-3 col-md-4">
-						<div class="venue-gallery">
-							<a href="<?= base_url(); ?>assets/img/default.png" class="venobox"
-								data-gall="venue-gallery">
-								<img src="<?= base_url(); ?>assets/img/default.png" alt="" class="img-fluid-maps">
-							</a>
-						</div>
-					</div>
-
-					<div class="col-lg-3 col-md-4">
-						<div class="venue-gallery">
-							<a href="<?= base_url(); ?>assets/img/default.png" class="venobox"
-								data-gall="venue-gallery">
-								<img src="<?= base_url(); ?>assets/img/default.png" alt="" class="img-fluid-maps">
-							</a>
-						</div>
-					</div>
-
-					<div class="col-lg-3 col-md-4">
-						<div class="venue-gallery">
-							<a href="<?= base_url(); ?>assets/img/default.png" class="venobox"
-								data-gall="venue-gallery">
-								<img src="<?= base_url(); ?>assets/img/default.png" alt="" class="img-fluid-maps">
-							</a>
-						</div>
-					</div>
-
-					<div class="col-lg-3 col-md-4">
-						<div class="venue-gallery">
-							<a href="<?= base_url(); ?>assets/img/default.png" class="venobox"
-								data-gall="venue-gallery">
-								<img src="<?= base_url(); ?>assets/img/default.png" alt="" class="img-fluid-maps">
-							</a>
-						</div>
-					</div>
-
-				</div>
 			</div>
 
 		</section>
@@ -458,57 +279,51 @@
 				</div>
 
 				<div class="row">
-					<!-- Pro Tier -->
-					<div class="col-lg-4">
-						<div class="card">
-							<div class="card-body">
-								<h5 class="card-title text-muted text-uppercase text-center"><i>(Kelas)</i></h5>
-								<h6 class="card-price text-center"><i>(Harga)</i></h6>
-								<hr>
-								<ul class="fa-ul">
-									<li><span class="fa-li"><i class="fa fa-check"></i></span><i>(Benefit)</i></li>
-									<li><span class="fa-li"><i class="fa fa-check"></i></span><i>(Benefit)</i></li>
-									
-								</ul>
-								<hr>
-								<div class="text-center">
-									<button type="button" class="btn" data-toggle="modal"
-										data-target="#buy-ticket-modal" data-ticket-type="premium-access">Buy
-										Now</button>
-								</div>
-
-							</div>
+					<?php foreach ($tiket as $tkt ) : 
+					if ($tkt < 2) { ?>
+					<div class="col-lg-12 mt-3">
+						<div class="tiket">
+							<?= $tkt['kelas']; ?> <br>
+							<?= $tkt['harga']; ?> <br>
+							<button type="button" class="btn btn-outline-primary mt-2" data-toggle="modal"
+								data-target="#buy-ticket-modal<?= $tkt['id_tiket'] ?>">
+								Beli
+							</button>
 						</div>
 					</div>
+					<?php } else { ?>
+					<div class="col-lg-6 mt-3">
+						<div class="tiket">
+							<?= $tkt['kelas']; ?> <br>
+							<?= $tkt['harga']; ?> <br>
+							<button type="button" class="btn btn-outline-primary mt-2" data-toggle="modal"
+								data-target="#buy-ticket-modal<?= $tkt['id_tiket'] ?>">
+								Beli
+							</button>
+						</div>
+					</div>
+					<?php } endforeach; ?>
 				</div>
 
 			</div>
+			<?php foreach ($tiket as $tkt) : ?>
 
 			<!-- Modal Order Form -->
-			<div id="buy-ticket-modal" class="modal fade">
-				<div class="modal-dialog" role="document">
+			<div id="buy-ticket-modal<?= $tkt['id_tiket'] ?>" class="modal fade">
+				<div class="modal-dialog " role="document">
 					<div class="modal-content">
 						<div class="modal-header">
-							<h4 class="modal-title">Buy Tickets</h4>
+							<h4 style="color: navy !important;" class="modal-title">Buy Tickets</h4>
 							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 								<span aria-hidden="true">&times;</span>
 							</button>
 						</div>
 						<div class="modal-body">
-							<form method="POST" action="#">
-								<div class="form-group">
-									<input type="text" class="form-control" name="your-name" placeholder="Your Name">
-								</div>
-								<div class="form-group">
-									<input type="text" class="form-control" name="your-email" placeholder="Your Email">
-								</div>
-								<div class="form-group">
-									<select id="ticket-type" name="ticket-type" class="form-control">
-										<option value="">-- Select Your Ticket Type --</option>
-										<option value="standard-access">Standard Access</option>
-										<option value="pro-access">Pro Access</option>
-										<option value="premium-access">Premium Access</option>
-									</select>
+							<form method="POST" action="<?= base_url('home/add_item/'.$tkt['id_tiket']) ?>">
+								<div>
+									<small class="mb-2 text-danger">*Maksimal pembelian 5 tiket</small>
+									<input class="form-control mb-3" placeholder="Masukan Jumlah Tiket" type="number"
+										min="1" max="5" name="qty" required>
 								</div>
 								<div class="text-center">
 									<button type="submit" class="btn">Buy Now</button>
@@ -518,17 +333,18 @@
 					</div><!-- /.modal-content -->
 				</div><!-- /.modal-dialog -->
 			</div><!-- /.modal -->
+			<?php ;endforeach ?>
 
 		</section>
 
 		<!--==========================
       Gallery Section
     ============================-->
-		<section id="gallery" class="wow fadeInUp">
+		<section id="history" class="wow fadeInUp">
 
 			<div class="container">
 				<div class="section-header">
-					<h2>Gallery</h2>
+					<h2>History</h2>
 					<p>Check our gallery from the recent events</p>
 				</div>
 			</div>
@@ -551,6 +367,9 @@
 				<a href="<?= base_url(); ?>assets/img/default.png" class="venobox" data-gall="gallery-carousel"><img
 						src="<?= base_url(); ?>assets/img/default.png" alt=""></a>
 			</div>
+			<div class="detail-content mt-3">
+				<a href="<?= base_url('home/detail_gallery') ?>" class="detail">See More</a>
+			</div>
 
 		</section>
 
@@ -563,59 +382,16 @@
 				<div class="section-header">
 					<h2>Sponsors</h2>
 				</div>
-
 				<div class="row no-gutters supporters-wrap clearfix">
-
+					<?php foreach ($sponsor as $s ) : ?>
 					<div class="col-lg-3 col-md-4 col-xs-6">
 						<div class="supporter-logo">
-							<img src="<?= base_url(); ?>assets/img/default.png" class="img-fluid-sponsor" alt="">
+							<img src="<?= base_url(); ?>assets/img/<?= $s['logo_sponsor'] ?>" class="img-fluid-sponsor"
+								alt="">
 						</div>
 					</div>
-
-					<div class="col-lg-3 col-md-4 col-xs-6">
-						<div class="supporter-logo">
-							<img src="<?= base_url(); ?>assets/img/default.png" class="img-fluid-sponsor" alt="">
-						</div>
-					</div>
-
-					<div class="col-lg-3 col-md-4 col-xs-6">
-						<div class="supporter-logo">
-							<img src="<?= base_url(); ?>assets/img/default.png" class="img-fluid-sponsor" alt="">
-						</div>
-					</div>
-
-					<div class="col-lg-3 col-md-4 col-xs-6">
-						<div class="supporter-logo">
-							<img src="<?= base_url(); ?>assets/img/default.png" class="img-fluid-sponsor" alt="">
-						</div>
-					</div>
-
-					<div class="col-lg-3 col-md-4 col-xs-6">
-						<div class="supporter-logo">
-							<img src="<?= base_url(); ?>assets/img/default.png" class="img-fluid-sponsor" alt="">
-						</div>
-					</div>
-
-					<div class="col-lg-3 col-md-4 col-xs-6">
-						<div class="supporter-logo">
-							<img src="<?= base_url(); ?>assets/img/default.png" class="img-fluid-sponsor" alt="">
-						</div>
-					</div>
-
-					<div class="col-lg-3 col-md-4 col-xs-6">
-						<div class="supporter-logo">
-							<img src="<?= base_url(); ?>assets/img/default.png" class="img-fluid-sponsor" alt="">
-						</div>
-					</div>
-
-					<div class="col-lg-3 col-md-4 col-xs-6">
-						<div class="supporter-logo">
-							<img src="<?= base_url(); ?>assets/img/default.png" class="img-fluid-sponsor" alt="">
-						</div>
-					</div>
-
+					<?php endforeach; ?>
 				</div>
-
 			</div>
 
 		</section>
@@ -633,101 +409,19 @@
 
 				<div class="row justify-content-center">
 					<div class="col-lg-9">
+						<?php foreach ($faq as $f ) : ?>
 						<ul id="faq-list">
-
 							<li>
-								<a data-toggle="collapse" class="collapsed" href="#faq1">Pertanyaan
+								<a data-toggle="collapse" class="collapsed" href="#faq1"> <?= $f['pertanyaan'] ?>
 									<i class="fa fa-minus-circle"></i></a>
 								<div id="faq1" class="collapse" data-parent="#faq-list">
 									<p>
-										Jawaban
+										<?= $f['jawaban']; ?>
 									</p>
 								</div>
 							</li>
-
-							<!-- <li>
-								<a data-toggle="collapse" href="#faq2" class="collapsed">Feugiat scelerisque varius
-									morbi enim nunc
-									faucibus a pellentesque? <i class="fa fa-minus-circle"></i></a>
-								<div id="faq2" class="collapse" data-parent="#faq-list">
-									<p>
-										Dolor sit amet consectetur adipiscing elit pellentesque habitant morbi. Id
-										interdum velit laoreet id
-										donec ultrices. Fringilla phasellus faucibus scelerisque eleifend donec pretium.
-										Est pellentesque
-										elit ullamcorper dignissim. Mauris ultrices eros in cursus turpis massa
-										tincidunt dui.
-									</p>
-								</div>
-							</li>
-
-							<li>
-								<a data-toggle="collapse" href="#faq3" class="collapsed">Dolor sit amet consectetur
-									adipiscing elit
-									pellentesque habitant morbi? <i class="fa fa-minus-circle"></i></a>
-								<div id="faq3" class="collapse" data-parent="#faq-list">
-									<p>
-										Eleifend mi in nulla posuere sollicitudin aliquam ultrices sagittis orci.
-										Faucibus pulvinar
-										elementum integer enim. Sem nulla pharetra diam sit amet nisl suscipit. Rutrum
-										tellus pellentesque
-										eu tincidunt. Lectus urna duis convallis convallis tellus. Urna molestie at
-										elementum eu facilisis
-										sed odio morbi quis
-									</p>
-								</div>
-							</li>
-
-							<li>
-								<a data-toggle="collapse" href="#faq4" class="collapsed">Ac odio tempor orci dapibus.
-									Aliquam eleifend
-									mi in nulla? <i class="fa fa-minus-circle"></i></a>
-								<div id="faq4" class="collapse" data-parent="#faq-list">
-									<p>
-										Dolor sit amet consectetur adipiscing elit pellentesque habitant morbi. Id
-										interdum velit laoreet id
-										donec ultrices. Fringilla phasellus faucibus scelerisque eleifend donec pretium.
-										Est pellentesque
-										elit ullamcorper dignissim. Mauris ultrices eros in cursus turpis massa
-										tincidunt dui.
-									</p>
-								</div>
-							</li>
-
-							<li>
-								<a data-toggle="collapse" href="#faq5" class="collapsed">Tempus quam pellentesque nec
-									nam aliquam sem et
-									tortor consequat? <i class="fa fa-minus-circle"></i></a>
-								<div id="faq5" class="collapse" data-parent="#faq-list">
-									<p>
-										Molestie a iaculis at erat pellentesque adipiscing commodo. Dignissim
-										suspendisse in est ante in.
-										Nunc vel risus commodo viverra maecenas accumsan. Sit amet nisl suscipit
-										adipiscing bibendum est.
-										Purus gravida quis blandit turpis cursus in
-									</p>
-								</div>
-							</li>
-
-							<li>
-								<a data-toggle="collapse" href="#faq6" class="collapsed">Tortor vitae purus faucibus
-									ornare. Varius vel
-									pharetra vel turpis nunc eget lorem dolor? <i class="fa fa-minus-circle"></i></a>
-								<div id="faq6" class="collapse" data-parent="#faq-list">
-									<p>
-										Laoreet sit amet cursus sit amet dictum sit amet justo. Mauris vitae ultricies
-										leo integer malesuada
-										nunc vel. Tincidunt eget nullam non nisi est sit amet. Turpis nunc eget lorem
-										dolor sed. Ut
-										venenatis tellus in metus vulputate eu scelerisque. Pellentesque diam volutpat
-										commodo sed egestas
-										egestas fringilla phasellus faucibus. Nibh tellus molestie nunc non blandit
-										massa enim nec.
-									</p>
-								</div>
-							</li> -->
-
 						</ul>
+						<?php endforeach; ?>
 					</div>
 				</div>
 
@@ -738,26 +432,7 @@
 		<!--==========================
       Subscribe Section
     ============================-->
-		<section id="subscribe">
-			<div class="container wow fadeInUp">
-				<div class="section-header">
-					<h2>Newsletter</h2>
-					<p>Rerum numquam illum recusandae quia mollitia consequatur.</p>
-				</div>
 
-				<form method="POST" action="#">
-					<div class="form-row justify-content-center">
-						<div class="col-auto">
-							<input type="text" class="form-control" placeholder="Enter your Email">
-						</div>
-						<div class="col-auto">
-							<button type="submit">Subscribe</button>
-						</div>
-					</div>
-				</form>
-
-			</div>
-		</section>
 	</main>
 
 	<!--==========================
@@ -768,22 +443,17 @@
 			<div class="container">
 				<div class="row">
 
-					<div class="col-lg-6 col-md-6 footer-info">
-						<h1> <b> <i>(LOGO)</i> </b> </h1>
+					<div class="col-lg-5 col-md-6 footer-info">
+						<img src="<?= base_url(); ?>assets/img/logo/logo sync white.png" alt="" title="">
 						<p> <i>Deskripsi Event.</i></p>
+						<div class="social-links mt-3">
+							<a href="#" class="twitter"><i class="fa fa-twitter"></i></a>
+							<a href="#" class="facebook"><i class="fa fa-facebook"></i></a>
+							<a href="#" class="instagram"><i class="fa fa-instagram"></i></a>
+							<a href="#" class="google-plus"><i class="fa fa-google-plus"></i></a>
+							<a href="#" class="linkedin"><i class="fa fa-linkedin"></i></a>
+						</div>
 					</div>
-
-					<!--  <div class="col-lg-3 col-md-6 footer-links">
-						<h4>Useful Links</h4>
-						<ul>
-							<li><i class="fa fa-angle-right"></i> <a href="#">Home</a></li>
-							<li><i class="fa fa-angle-right"></i> <a href="#">About us</a></li>
-							<li><i class="fa fa-angle-right"></i> <a href="#">Services</a></li>
-							<li><i class="fa fa-angle-right"></i> <a href="#">Terms of service</a></li>
-							<li><i class="fa fa-angle-right"></i> <a href="#">Privacy policy</a></li>
-						</ul>
-					</div> -->
-
 					<div class="col-lg-3 col-md-6 footer-links">
 						<h4>Useful Links</h4>
 						<ul>
@@ -794,21 +464,18 @@
 						</ul>
 					</div>
 
-					<div class="col-lg-3 col-md-6 footer-contact">
+					<div class="col-lg-4 col-md-6 footer-contact">
 						<h4>Contact Us</h4>
 						<p>
-							<i>(Alamat) <br></i>
-							<strong>Phone:</strong> <i>(nomor)</i><br>
-							<strong>Email:</strong> <i>(email)</i><br>
+							Perumahan Austinville Blok D2 <br> Dieng Atas, Malang - Jawa Timur
+							<br><br>
+							<strong>Daniel Agustinus :</strong> +62 878-5669-2424 <br>
+							<strong>Anita Linda :</strong> +62 813-3385-8993 <br>
+							<strong>Fahmi Rizky :</strong> +62 813-8288-7747 <br>
+							<strong>Yopi :</strong> +62 821-3693-6984 <br>
 						</p>
 
-						<div class="social-links">
-							<a href="#" class="twitter"><i class="fa fa-twitter"></i></a>
-							<a href="#" class="facebook"><i class="fa fa-facebook"></i></a>
-							<a href="#" class="instagram"><i class="fa fa-instagram"></i></a>
-							<a href="#" class="google-plus"><i class="fa fa-google-plus"></i></a>
-							<a href="#" class="linkedin"><i class="fa fa-linkedin"></i></a>
-						</div>
+
 
 					</div>
 
