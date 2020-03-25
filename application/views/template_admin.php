@@ -13,8 +13,19 @@
     <!-- Chartist -->
     <link rel="stylesheet" href="<?= base_url('assets/'); ?>plugins/chartist/css/chartist.min.css">
     <link rel="stylesheet" href="<?= base_url('assets/'); ?>plugins/chartist-plugin-tooltips/css/chartist-plugin-tooltip.css">
+
+    <link href="https://cdn.jsdelivr.net/npm/vanilla-datatables@latest/dist/vanilla-dataTables.min.css" rel="stylesheet"
+		type="text/css">
+
     <!-- Custom Stylesheet -->
+    <?php if ($konten == 'admin/scan') { ?>
+        <link href="<?= base_url(); ?>assets/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <link href="<?= base_url(); ?>assets/qr/css/style.css" rel="stylesheet">
+    <?php } ?>
+    
     <link href="<?= base_url('assets/'); ?>css/style_admin.css" rel="stylesheet">
+    
+        
 
 </head>
 
@@ -141,7 +152,7 @@
                        
                         <li class="icons d-none d-md-flex">
                             <a href="javascript:void(0)">
-                                <b><span><h5 style="color: grey;"><?= $data['nama']; ?></h5></span></b>
+                                <b><span><h5 style="color: grey;"><?= $_SESSION['nama']; ?></h5></span></b>
                             </a>
                            
                         </li>
@@ -167,7 +178,7 @@
                                         <li>
                                             <a href="page-lock.html"><i class="icon-lock"></i> <span>Lock Screen</span></a>
                                         </li> -->
-                                        <li><a href="<?= base_url('auth/logout') ?>"><i class="icon-key"></i> <span>Logout</span></a></li>
+                                        <li><a href="<?= base_url('log/logout') ?>"><i class="icon-key"></i> <span>Logout</span></a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -188,7 +199,7 @@
                 <ul class="metismenu" id="menu">
                     <li class="nav-label">ADMIN PAGE</li>
                     <li>
-                        <a href="<?= base_url('dashboard') ?>" aria-expanded="false">
+                        <a href="<?= base_url('admin/dashboard') ?>" aria-expanded="false">
                             <i class="icon-badge menu-icon"></i><span class="nav-text">Dashboard</span>
                         </a>
                     </li>
@@ -202,24 +213,34 @@
                             <i class="icon-speedometer menu-icon"></i><span class="nav-text">Data</span>
                         </a>
                         <ul aria-expanded="false">
-                            <li><a href="<?= base_url('admin') ?>">Data Admin</a></li>
-                            <li><a href="<?= base_url('guestar') ?>">Data Guest</a></li>
+                            <li><a href="<?= base_url('admin/admin') ?>">Data Admin</a></li>
+                            <li><a href="<?= base_url('admin/guest_star') ?>">Data Guest</a></li>
                             <li><a href="<?= base_url('admin/tiket') ?>">Data Tiket</a></li>
-                            <li><a href="<?= base_url('deje') ?>">Data DJ</a></li>
+                            <li><a href="<?= base_url('admin/dj') ?>">Data DJ</a></li>
                             <!-- <li><a href="./index-2.html">Home 2</a></li> -->
                         </ul>
                     </li>
                     <li>
-                        <a href="<?= base_url('transaksi') ?>" aria-expanded="false">
+                        <a href="<?= base_url('admin/transaksi') ?>" aria-expanded="false">
                             <i class="fa fa-fw fa-cart-plus"></i><span class="nav-text">Transaksi Masuk <sup class="badge badge-info"><?= $this->db->count_all('transaksi'); ?></sup></span>
                         </a>
                     </li>
-                    <li class="mega-menu mega-menu-sm">
+                    <li>
+                        <a href="<?= base_url('admin/scan') ?>" aria-expanded="false">
+                            <i class="fa fa-fw fa-search"></i><span class="nav-text">Scan</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="<?= base_url('user/editable_home') ?>" aria-expanded="false">
+                            <i class="fa fa-fw fa-home"></i><span class="nav-text">Ubah Tampilan User</span>
+                        </a>
+                    </li>
+                    <!-- <li class="mega-menu mega-menu-sm">
                         <a class="has-arrow" href="javascript:void()" aria-expanded="false">
                             <i class="icon-globe-alt menu-icon"></i><span class="nav-text">Layouts</span>
                         </a>
                         <ul aria-expanded="false">
-                            <li><a href="<?= base_url('dashboard/ss') ?>">Data Guest Star</a></li>
+                            <li><a href="<?//= base_url('admin/dashboard/ss') ?>">Data Guest Star</a></li>
                             <li><a href="./layout-one-column.html">One Column</a></li>
                             <li><a href="./layout-two-column.html">Two column</a></li>
                             <li><a href="./layout-compact-nav.html">Compact Nav</a></li>
@@ -232,7 +253,7 @@
                             <li><a href="./layout-fixed-header.html">Fixed Header</a></li>
                             <li><a href="layout-fixed-sidebar.html">Fixed Sidebar</a></li>
                         </ul>
-                    </li>
+                    </li> -->
                     
                 </ul>
             </div>
@@ -246,12 +267,12 @@
         ***********************************-->
         <div class="content-body">
         
-            <div class="container-fluid mt-3">
+            <div class="container-fluid mt-3" id="QR-Code">
                 <?php $this->load->view($konten); ?>
                
                 
 
-                    </div>
+                    
             </div>
             <!-- #/ container -->
         </div>
@@ -280,6 +301,8 @@
     <!--**********************************
         Scripts
     ***********************************-->
+    
+
     <script src="<?= base_url('assets/'); ?>plugins/common/common.min.js"></script>
     <script src="<?= base_url('assets/'); ?>js/custom.min.js"></script>
     <script src="<?= base_url('assets/'); ?>js/settings.js"></script>

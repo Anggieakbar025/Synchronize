@@ -1,3 +1,28 @@
+.operation-qty-min {
+	text-decoration: none;
+	color: grey;
+	font-size: 3vh;
+	padding: 1px 5px 1px 5px;
+}
+
+.operation-qty-plus {
+	text-decoration: none;
+	color:grey;
+	font-size: 15px;
+	font-weight: bold;
+	padding: 1px 5px 1px 5px;
+}
+
+.operation-qty-min:hover{
+	text-decoration: none;
+	color: red;
+}
+
+.operation-qty-plus:hover{
+	text-decoration: none;
+	color:rgb(5, 255, 5);
+}
+
 body {
 	font-size: 14px;
 	line-height: 24px;

@@ -11,14 +11,14 @@ class home extends CI_Controller {
     }
 
     public function index()
-    {  
-        $this->load->view('landing');
+    {
+        $this->load->view('user/landing_page');
     }
     
     public function home()
     {
         $data['tiket'] = $this->home_model->getTiket();
-        $data['guest'] = $this->guest_model->getGuest();
+        $data['guest'] = $this->gs_model->getGuest();
         $data['konten'] = $this->home_model->getKonten();
         $data['sponsor'] = $this->home_model->getSponsor();
         $data['jadwal'] = $this->home_model->getJadwal();
@@ -26,51 +26,11 @@ class home extends CI_Controller {
         $data['faq'] = $this->home_model->getFaq();
         $this->load->view('template', $data);
     }
-    
-    public function detail_gallery()
-    {
-        $data['guest'] = $this->guest_model->getGuest();
-        $this->load->view('detail_gallery', $data);
-    }
-    
-    public function editable_home()
-    {
-        $data['sponsor'] = $this->home_model->getSponsor();
-        $data['faq'] = $this->home_model->getFaq();
-        $data['konten'] = $this->home_model->getKonten();
-        $data['jadwal'] = $this->home_model->getJadwal();
-        $data['detail_jadwal'] = $this->home_model->getDetailJadwal();
-        $data['tiket'] = $this->home_model->getTiket();
-        $data['guest'] = $this->guest_model->getGuest();
-        $this->load->view('editable_template', $data);
-    }
-
-    
-    public function talent()
-    {
-        $data['guest'] = $this->guest_model->getGuest();
-        $this->load->view('talent', $data);
-    }
-    
-    public function lineup($id)
-    {
-        $data['guest_detail'] = $this->guest_model->getLineup($id);
-        $this->load->view('lineup', $data);
-    }
-
-    public function checkout()
-    {
-        if(!isset($_SESSION['logged_in'])){
-            redirect('login','refresh');
-        } else {
-            $this->load->view('checkout');
-        }
-    }
-
+        
     public function add_item($id)
     {
         if(!isset($_SESSION['logged_in'])){
-            redirect('login','refresh');
+            redirect('log/login','refresh');
         } else {
             $tiket = $this->home_model->getTiketCart($id);
             $qty = $this->input->post('qty');
@@ -84,13 +44,40 @@ class home extends CI_Controller {
                         'price'   => $tiket->harga,
                         'name'    => $tiket->kelas
                     );
-            
+                    
                     $this->cart->insert($data);
                 }
             }
-            redirect('home/checkout','refresh');
+            redirect('user/checkout','refresh');
         }
+    }
+
+    public function plusQty($id)
+    {
+        $tiket = $this->home_model->getTiketCart($id);
+        $data = array(
+            'id'      => $id,
+            'qty'     => 1,
+            'price'   => $tiket->harga,
+            'name'    => $tiket->kelas
+        );
         
+        $this->cart->insert($data);
+        redirect('user/checkout','refresh');
+    }
+    
+    public function minQty($id)
+    {
+        $tiket = $this->home_model->getTiketCart($id);
+        $data = array(
+            'id'      => $id,
+            'qty'     => -1,
+            'price'   => $tiket->harga,
+            'name'    => $tiket->kelas
+        );
+        
+        $this->cart->insert($data);
+        redirect('user/checkout','refresh');
     }
 
     public function pesan()
@@ -100,38 +87,45 @@ class home extends CI_Controller {
         if ($this->form_validation->run() == TRUE) {
             $this->home_model->pesan();
             $this->cart->destroy();
+
+            $config = array(
+                'protocol' => 'smtp',
+                'smtp_host'     => 'ssl://smtp.googlemail.com',
+                'smtp_port'     => 465,
+                'smtp_user'     => 'anggieakbar025@gmail.com',
+                'smtp_pass'     => 'abyan789',
+                'mailtype'      => 'html',
+                'charset'       => 'iso-8859-1'
+            );
+
+            $this->load->library('email', $config);
+
+            $this->email->set_newline("\n\n");
+            
+            $this->email->from('anggieakbar025@gmail.com', 'Anggie');
+            $this->email->to('anggieakbar09@gmail.com');
+            
+            $this->email->subject('Konfirmasi Pembelian');
+            $this->email->message('Terima kasih sudah membeli tiket melalui aplikasi kami. Segera lakukan pembayaran.');
+            
+            return $this->email->send();
+
+            
             $this->session->set_flashdata('terbeli','<div class="alert alert-success alert-dismissible" role="alert">
             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
             <i class="fa fa-check-circle"></i> Berhasil membeli tiket!
             </div>');
-            redirect('home/profil','refresh');
+            redirect('user/profil','refresh');
         } else {
             $this->session->set_flashdata('gagal_pesan', 'Pesanan Gagal Dibuat');
-            redirect('home/checkout','refresh');
+            redirect('user/checkout','refresh');
         }
-    }
-    
-    public function terbeli()
-    {
-        $this->load->view('terbeli');
     }
     
     public function hapusCart()
     {
         $this->cart->destroy();
-        redirect('home/checkout','refresh');
-    }
-
-    public function profil()
-    {
-        $this->load->view('profil');
-        
-    }
-
-    public function logout()
-    {
-        session_destroy();
-        redirect('home/home','refresh');
+        redirect('user/checkout','refresh');
     }
 
 }

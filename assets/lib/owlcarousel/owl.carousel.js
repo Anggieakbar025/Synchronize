@@ -833,7 +833,7 @@
 
 	/**
 	 * Gets absolute position of the closest item for a coordinate.
-	 * @todo Setting `freeDrag` makes `closest` not reusable. See #165.
+	 * @todo Setting `freeDrag` makes `closest` not reusable. See #1SELECT g.nama_guest, e.id_event FROM history h JOIN event e ON h.id_event = e.id_event JOIN guest g ON e.id_event = g.id_event 5.
 	 * @protected
 	 * @param {Number} coordinate - The coordinate in pixel.
 	 * @param {String} direction - The direction to check for the closest item. Ether `left` or `right`.

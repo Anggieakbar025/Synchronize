@@ -79,7 +79,7 @@
 						<?php if (!isset($_SESSION['logged_in'])) { ?>
 						<ul class="profil">
 							<li>
-								<a href="<?= base_url('login') ?>" class="btn btn-outline-danger">
+								<a href="<?= base_url('log/login') ?>" class="btn btn-outline-danger">
 									LOGIN
 								</a>
 							</li>
@@ -87,12 +87,12 @@
 						<?php } else { ?>
 						<ul class="profil">
 							<li>
-								<a href="<?= base_url('home/profil') ?>">
+								<a href="<?= base_url('user/profil') ?>">
 									<i class="feather icon-user"></i> Profile
 								</a>
 							</li>
 							<li>
-								<a href="<?= base_url('login/logout') ?>">
+								<a href="<?= base_url('log/logout') ?>">
 									<i class="feather icon-log-out"></i> Logout
 								</a>
 							</li>
@@ -109,10 +109,11 @@
   	============================-->
 	<section id="intro">
 		<div class="intro-container wow fadeIn">
-			<img class="pb-0 event-img" src="<?= base_url(); ?>assets/img/logo/<?= $logo; ?>" alt="" title="">
-			<p class="mb-4 pb-0">21 Februari 2019, Graha Cakrawala Universitas Negeri Malang</p>
-			<a href="#" class="venobox play-btn mb-4" data-vbtype="video" data-autoplay="true"></a>
-			<a href="#about" class="about-btn scrollto">About The Event</a>
+			<p class="mb-4 pb-0">Next Event : </p>
+			<img class="pb-0 event-img" src="<?= base_url(); ?>assets/img/logo/<?= $logo; ?>" alt="" title=""
+				height="390px">
+			<a href="www.youtube.com" class="venobox play-btn mb-4" data-vbtype="video" data-autoplay="true"></a>
+			<a href="#buy-tickets" class="about-btn scrollto">Buy Ticket</a>
 		</div>
 	</section>
 
@@ -123,7 +124,7 @@
       About Section
     ============================-->
 		<section id="about">
-			<div class="container wow fadeInUp">
+			<div class="container wow fadeInUp mt-3">
 				<div class="row">
 					<div class="col-lg-1"></div>
 					<div class="col-lg-5 pl-4">
@@ -146,7 +147,7 @@
       Line Up Section
   	  ============================-->
 		<section id="lineup" class="wow fadeInUp">
-			<div class="container">
+			<div class="container mt-5">
 				<div class="section-header">
 					<h2>line up</h2>
 					<p>Here are some of our line up</p>
@@ -156,12 +157,14 @@
 					<?php foreach ($guest as $gs) : ?>
 					<div class="col-lg-4 col-md-6">
 						<div class="guest">
-							<a href="<?= base_url(); ?>home/lineup/<?= $gs['id_guest'] ?>">
-								<img src="<?= base_url(); ?>assets/img/default.png" alt="Speaker 1"
+							<a href="<?= base_url(); ?>user/lineup/index/<?= $gs['id_guest'] ?>">
+								<img src="<?= base_url(); ?>assets/images/gs/<?= $gs['gambar'] ?>" alt="Speaker 1"
 									class="img-fluid-guest">
 							</a>
 							<div class="details">
-								<h3><a href="<?= base_url('home/lineup'); ?>"><?= $gs['nama_guest']; ?></a></h3>
+								<h3><a
+										href="<?= base_url('home/lineup'); ?>/<?= $gs['id_guest'] ?>"><?= $gs['nama_guest']; ?></a>
+								</h3>
 								<p><?= $gs['genre']; ?></p>
 								<div class="social">
 									<a href=""><i class="fa fa-twitter"></i></a>
@@ -182,11 +185,8 @@
       Schedule Section
     ============================-->
 
-
-
-
 		<section id="schedule" class="section-with-bg">
-			<div class="container wow fadeInUp">
+			<div class="container wow fadeInUp mt-5">
 				<div class="section-header">
 					<h2>Event Schedule</h2>
 					<p>Here is our event schedule</p>
@@ -209,13 +209,13 @@
 						<?php foreach ($detail_jadwal as $dj ) {
 						if ($j['id_jadwal'] == $dj['id_jadwal']) {
 							if ($dj['gambar'] == null) { ?>
-								<div class="row schedule-item">
-									<div class="col-md-2 mt-3"><time><?= $dj['waktu']; ?></time></div>
-									<div class="col-md-10">
-										<h4><?= $dj['kegiatan']; ?></h4>
-										<p><?= $dj['deskripsi_kegiatan']; ?></p>
-									</div>
-								</div>
+						<div class="row schedule-item">
+							<div class="col-md-2 mt-3"><time><?= $dj['waktu']; ?></time></div>
+							<div class="col-md-10">
+								<h4><?= $dj['kegiatan']; ?></h4>
+								<p><?= $dj['deskripsi_kegiatan']; ?></p>
+							</div>
+						</div>
 						<?php } else { ?>
 						<div class="row schedule-item">
 							<div class="col-md-2 mt-3"><time><?= $dj['waktu']; ?></time></div>
@@ -236,12 +236,31 @@
 			</div>
 		</section>
 
+	<!--==========================
+    Intro Section
+  	============================-->
+	  <section id="about">
+			<div class="container wow fadeInUp mt-3 mb-3">
+				<div class="row">
+					<div class="col-md-12">
+						<h2 class="text-center">Countdown to <span>UN</span></h2>
+						<div class="countdown">
+							<div id="hari"></div>
+							<div id="jam"></div>
+							<div id="menit"></div>
+							<div id="detik"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
 		<!--==========================
       Venue Section
     ============================-->
 		<section id="venue" class="wow fadeInUp">
 
-			<div class="container-fluid">
+			<div class="container-fluid mt-5">
 
 				<div class="section-header">
 					<h2>Event Venue</h2>
@@ -271,7 +290,7 @@
       Buy Ticket Section
     ============================-->
 		<section id="buy-tickets" class="section-with-bg wow fadeInUp">
-			<div class="container">
+			<div class="container mt-5">
 
 				<div class="section-header">
 					<h2>Buy Tickets</h2>
@@ -279,24 +298,26 @@
 				</div>
 
 				<div class="row">
-					<?php foreach ($tiket as $tkt ) : 
+					<?php foreach ($tiket as $tkt ) :
 					if ($tkt < 2) { ?>
 					<div class="col-lg-12 mt-3">
 						<div class="tiket">
-							<?= $tkt['kelas']; ?> <br>
+							<b><?= $tkt['kelas']; ?></b> <br>
 							<?= $tkt['harga']; ?> <br>
-							<button type="button" class="btn btn-outline-primary mt-2" data-toggle="modal"
+							<button type="button" class="btn btn-outline-light mt-2" data-toggle="modal"
 								data-target="#buy-ticket-modal<?= $tkt['id_tiket'] ?>">
 								Beli
 							</button>
 						</div>
 					</div>
 					<?php } else { ?>
-					<div class="col-lg-6 mt-3">
-						<div class="tiket">
-							<?= $tkt['kelas']; ?> <br>
+					<div class="col-lg-6">
+						<div class="tiket mb-1">
+							<b><?= $tkt['kelas']; ?></b>
+							<br>
 							<?= $tkt['harga']; ?> <br>
-							<button type="button" class="btn btn-outline-primary mt-2" data-toggle="modal"
+							<br>
+							<button type="button" class="btn btn-outline-primary" data-toggle="modal"
 								data-target="#buy-ticket-modal<?= $tkt['id_tiket'] ?>">
 								Beli
 							</button>
@@ -342,7 +363,7 @@
     ============================-->
 		<section id="history" class="wow fadeInUp">
 
-			<div class="container">
+			<div class="container mt-5">
 				<div class="section-header">
 					<h2>History</h2>
 					<p>Check our gallery from the recent events</p>
@@ -351,24 +372,24 @@
 
 			<div class="owl-carousel gallery-carousel">
 				<a href="<?= base_url(); ?>assets/img/default.png" class="venobox" data-gall="gallery-carousel"><img
-						src="<?= base_url(); ?>assets/img/default.png" alt=""></a>
+						height="200" width="250" src="<?= base_url(); ?>assets/img/default.png" alt=""></a>
 				<a href="<?= base_url(); ?>assets/img/default.png" class="venobox" data-gall="gallery-carousel"><img
-						src="<?= base_url(); ?>assets/img/default.png" alt=""></a>
+						height="200" width="250" src="<?= base_url(); ?>assets/img/default.png" alt=""></a>
 				<a href="<?= base_url(); ?>assets/img/default.png" class="venobox" data-gall="gallery-carousel"><img
-						src="<?= base_url(); ?>assets/img/default.png" alt=""></a>
+						height="200" width="250" src="<?= base_url(); ?>assets/img/default.png" alt=""></a>
 				<a href="<?= base_url(); ?>assets/img/default.png" class="venobox" data-gall="gallery-carousel"><img
-						src="<?= base_url(); ?>assets/img/default.png" alt=""></a>
+						height="200" width="250" src="<?= base_url(); ?>assets/img/default.png" alt=""></a>
 				<a href="<?= base_url(); ?>assets/img/default.png" class="venobox" data-gall="gallery-carousel"><img
-						src="<?= base_url(); ?>assets/img/default.png" alt=""></a>
+						height="200" width="250" src="<?= base_url(); ?>assets/img/default.png" alt=""></a>
 				<a href="<?= base_url(); ?>assets/img/default.png" class="venobox" data-gall="gallery-carousel"><img
-						src="<?= base_url(); ?>assets/img/default.png" alt=""></a>
+						height="200" width="250" src="<?= base_url(); ?>assets/img/default.png" alt=""></a>
 				<a href="<?= base_url(); ?>assets/img/default.png" class="venobox" data-gall="gallery-carousel"><img
-						src="<?= base_url(); ?>assets/img/default.png" alt=""></a>
+						height="200" width="250" src="<?= base_url(); ?>assets/img/default.png" alt=""></a>
 				<a href="<?= base_url(); ?>assets/img/default.png" class="venobox" data-gall="gallery-carousel"><img
-						src="<?= base_url(); ?>assets/img/default.png" alt=""></a>
+						height="200" width="250" src="<?= base_url(); ?>assets/img/default.png" alt=""></a>
 			</div>
 			<div class="detail-content mt-3">
-				<a href="<?= base_url('home/detail_gallery') ?>" class="detail">See More</a>
+				<a href="<?= base_url('user/gallery') ?>" class="detail">See More</a>
 			</div>
 
 		</section>
@@ -378,7 +399,7 @@
     ============================-->
 		<section id="supporters" class="section-with-bg wow fadeInUp">
 
-			<div class="container">
+			<div class="container mt-5">
 				<div class="section-header">
 					<h2>Sponsors</h2>
 				</div>
@@ -386,8 +407,9 @@
 					<?php foreach ($sponsor as $s ) : ?>
 					<div class="col-lg-3 col-md-4 col-xs-6">
 						<div class="supporter-logo">
-							<img src="<?= base_url(); ?>assets/img/<?= $s['logo_sponsor'] ?>" class="img-fluid-sponsor"
-								alt="">
+							<img src="<?= base_url(); ?>assets/images/sponsor/<?= $s['logo_sponsor'] ?>"
+								class="img-fluid-sponsor">
+
 						</div>
 					</div>
 					<?php endforeach; ?>
@@ -401,7 +423,7 @@
     ============================-->
 		<section id="faq" class="wow fadeInUp">
 
-			<div class="container">
+			<div class="container mt-5">
 
 				<div class="section-header">
 					<h2>F.A.Q </h2>
@@ -412,9 +434,10 @@
 						<?php foreach ($faq as $f ) : ?>
 						<ul id="faq-list">
 							<li>
-								<a data-toggle="collapse" class="collapsed" href="#faq1"> <?= $f['pertanyaan'] ?>
+								<a data-toggle="collapse" class="collapsed" href="#faq<?= $f['id_faq']; ?>">
+									<?= $f['pertanyaan'] ?>
 									<i class="fa fa-minus-circle"></i></a>
-								<div id="faq1" class="collapse" data-parent="#faq-list">
+								<div id="faq<?= $f['id_faq']; ?>" class="collapse" data-parent="#faq-list">
 									<p>
 										<?= $f['jawaban']; ?>
 									</p>
@@ -499,6 +522,34 @@
 	</footer><!-- #footer -->
 
 	<a href="#" class="back-to-top"><i class="fa fa-angle-up"></i></a>
+
+	<script type="text/javascript">
+		var countDate = new Date('16 Mar 2020').getTime();
+
+		function countdown() {
+			var now = new Date().getTime();
+			gap = countDate - now;
+
+			var detik = 1000;
+			var menit = detik * 60;
+			var jam = menit * 60;
+			var hari = jam * 24;
+
+			var h = Math.floor(gap / (hari));
+			var j = Math.floor((gap % (hari)) / (jam));
+			var m = Math.floor((gap % (jam)) / (menit));
+			var d = Math.floor((gap % (menit)) / (detik));
+
+			document.getElementById('hari').innerText = h;
+			document.getElementById('jam').innerText = j;
+			document.getElementById('menit').innerText = m;
+			document.getElementById('detik').innerText = d;
+		}
+
+		setInterval(function(){
+			countdown();
+		}, 1200);
+	</script>
 
 	<!-- JavaScript Libraries -->
 	<script src="<?= base_url(); ?>assets/lib/jquery/jquery.min.js"></script>
