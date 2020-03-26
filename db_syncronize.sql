@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 02, 2020 at 10:45 AM
+-- Generation Time: Mar 26, 2020 at 08:18 AM
 -- Server version: 10.1.38-MariaDB
 -- PHP Version: 7.3.3
 
@@ -34,7 +34,6 @@ CREATE TABLE `admin` (
   `email` varchar(225) NOT NULL,
   `password` varchar(225) NOT NULL,
   `aktif` int(11) NOT NULL,
-  `id_status` int(11) NOT NULL,
   `created_at` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -42,9 +41,9 @@ CREATE TABLE `admin` (
 -- Dumping data for table `admin`
 --
 
-INSERT INTO `admin` (`id_admin`, `nama`, `email`, `password`, `aktif`, `id_status`, `created_at`) VALUES
-(1, 'Krishna Hendra Wijaya', 'krisna@gmail.com', '$2y$10$wl2Ug7P4ZVqDjm9EaoUQauJooTfBBal4pD919nXOPFt8QCxEteXti', 1, 1, 1580108913),
-(3, 'Haifa', 'haifa@gmail.com', '$2y$10$kekWW.iP4V.pxc7uRoZtiehkZEH7a2fhBW.eHMScQHchFgp2BcD0S', 1, 1, 1580633097);
+INSERT INTO `admin` (`id_admin`, `nama`, `email`, `password`, `aktif`, `created_at`) VALUES
+(1, 'Krishna Hendra Wijaya', 'krisna@gmail.com', '$2y$10$wl2Ug7P4ZVqDjm9EaoUQauJooTfBBal4pD919nXOPFt8QCxEteXti', 1, 1580108913),
+(3, 'Haifa', 'haifa@gmail.com', '$2y$10$kekWW.iP4V.pxc7uRoZtiehkZEH7a2fhBW.eHMScQHchFgp2BcD0S', 1, 1580633097);
 
 -- --------------------------------------------------------
 
@@ -105,7 +104,15 @@ INSERT INTO `detail_transaksi` (`id_detail`, `id_tiket`, `id_transaksi`) VALUES
 (17, 1, 19),
 (18, 1, 20),
 (19, 1, 20),
-(20, 1, 21);
+(20, 1, 21),
+(21, 1, 22),
+(22, 1, 22),
+(23, 1, 23),
+(24, 1, 23),
+(25, 1, 24),
+(26, 1, 24),
+(27, 1, 25),
+(28, 1, 26);
 
 -- --------------------------------------------------------
 
@@ -127,24 +134,36 @@ CREATE TABLE `dj` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `editable`
+-- Table structure for table `event`
 --
 
-CREATE TABLE `editable` (
+CREATE TABLE `event` (
   `id_event` int(11) NOT NULL,
   `nama_event` varchar(255) NOT NULL,
   `about_event` text NOT NULL,
   `logo_event` text NOT NULL,
   `venue` text NOT NULL,
-  `location_venue` text NOT NULL
+  `location_venue` text NOT NULL,
+  `tanggal` date NOT NULL,
+  `status` enum('aktif','selesai') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `editable`
+-- Dumping data for table `event`
 --
 
-INSERT INTO `editable` (`id_event`, `nama_event`, `about_event`, `logo_event`, `venue`, `location_venue`) VALUES
-(2, 'Oh! Nais Festival', 'Festival musik yang dipadukan dengan berbagai rangkaian acara yang dikemas secara seru dan unik.', 'OH NAIS LOGO 2.png', 'Graha Cakrawala - Universitas Negeri Malang', 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14262.087279349189!2d112.6110546315304!3d-7.957466273883397!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.	1!3m3!1m2!1s0x2e78827f0d7f025b%3A0x92aef5088187b798!2sGraha%20Cakrawala%20UM!5e1!3m2!1sid!2sid!4v1577008694488!5m2!1sid!2sid');
+INSERT INTO `event` (`id_event`, `nama_event`, `about_event`, `logo_event`, `venue`, `location_venue`, `tanggal`, `status`) VALUES
+(2, 'Oh! Nais Festival', 'Festival musik yang dipadukan dengan berbagai rangkaian acara yang dikemas secara seru dan unik.', 'OH NAIS LOGO 2.png', 'Graha Cakrawala - Universitas Negeri Malang', 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14262.087279349189!2d112.6110546315304!3d-7.957466273883397!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.	1!3m3!1m2!1s0x2e78827f0d7f025b%3A0x92aef5088187b798!2sGraha%20Cakrawala%20UM!5e1!3m2!1sid!2sid!4v1577008694488!5m2!1sid!2sid', '2020-02-21', 'aktif');
+
+--
+-- Triggers `event`
+--
+DELIMITER $$
+CREATE TRIGGER `TG_ADD_HISTORY` AFTER INSERT ON `event` FOR EACH ROW BEGIN
+	INSERT INTO history VALUES('id_histpry', NEW.id_event - 1);
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -163,7 +182,8 @@ CREATE TABLE `faq` (
 --
 
 INSERT INTO `faq` (`id_faq`, `pertanyaan`, `jawaban`) VALUES
-(1, 'Apa sih Oh! Nasi Festival ?', 'Oh! Nais Festival adalah sebuah event music disertai dengan bazar makanan');
+(1, 'Apa sih Oh! Nais Festival?', 'Oh! Nais Festival merupakan sebuah festival musik disertai bazar dll.'),
+(2, 'Bagaimana akses menuju venue acara?', 'Gedung Graha Cakrawala terletak didalam Kampus Universitas Brawijaya dimana akses gerbang dapat melalui depan Malang Town Square');
 
 -- --------------------------------------------------------
 
@@ -176,16 +196,17 @@ CREATE TABLE `guest` (
   `nama_guest` varchar(225) NOT NULL,
   `deskripsi` text NOT NULL,
   `genre` varchar(225) NOT NULL,
-  `gambar` text NOT NULL
+  `gambar` text NOT NULL,
+  `id_event` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `guest`
 --
 
-INSERT INTO `guest` (`id_guest`, `nama_guest`, `deskripsi`, `genre`, `gambar`) VALUES
-(1, 'Arditho Pramono', 'Ardhito Pramono, sebuah musisi yang terkenal dengan parasnya yang tampan. Dengan lagu-lagunya yang kalem dan menyentuh membuat ia digemari para kaum hawa', 'Pop Modern', 'ardhito1.jpg'),
-(2, 'Feby Putri', 'Halo semuanya namaku febi putri', 'Women Solo', 'feby1.jpg');
+INSERT INTO `guest` (`id_guest`, `nama_guest`, `deskripsi`, `genre`, `gambar`, `id_event`) VALUES
+(1, 'Arditho Pramono', 'Ardhito Pramono, sebuah musisi yang terkenal dengan parasnya yang tampan. Dengan lagu-lagunya yang kalem dan menyentuh membuat ia digemari para kaum hawa', 'Pop Modern', 'ardhito1.jpg', 2),
+(2, 'Feby Putri', 'Halo semuanya namaku febi putri', 'Women Solo', 'feby1.jpg', 2);
 
 -- --------------------------------------------------------
 
@@ -226,25 +247,6 @@ INSERT INTO `sponsor` (`id_sponsor`, `nama_sponsor`, `logo_sponsor`) VALUES
 (1, 'Prost Beer', 'default.png'),
 (2, 'Bintang', 'default.png'),
 (3, 'Orang Tua', 'default.png');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `status`
---
-
-CREATE TABLE `status` (
-  `id_status` int(11) NOT NULL,
-  `status` varchar(225) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `status`
---
-
-INSERT INTO `status` (`id_status`, `status`) VALUES
-(1, 'admin'),
-(2, 'member');
 
 -- --------------------------------------------------------
 
@@ -309,7 +311,12 @@ INSERT INTO `transaksi` (`id_transaksi`, `id_user`, `qty`, `tanggal`, `status`) 
 (18, 1, 2, 1580632854, 'beli'),
 (19, 1, 1, 1580632905, 'beli'),
 (20, 1, 2, 1580633425, 'beli'),
-(21, 1, 1, 1580635448, 'beli');
+(21, 1, 1, 1580635448, 'beli'),
+(22, 1, 2, 1581159402, 'beli'),
+(23, 1, 2, 1582937895, 'beli'),
+(24, 1, 2, 1582938203, 'beli'),
+(25, 1, 1, 1582938558, 'beli'),
+(26, 1, 1, 1583495985, 'beli');
 
 -- --------------------------------------------------------
 
@@ -342,8 +349,7 @@ INSERT INTO `user` (`id_user`, `nama_user`, `email`, `password`, `telepon`, `cre
 -- Indexes for table `admin`
 --
 ALTER TABLE `admin`
-  ADD PRIMARY KEY (`id_admin`),
-  ADD KEY `id_status` (`id_status`);
+  ADD PRIMARY KEY (`id_admin`);
 
 --
 -- Indexes for table `detail_jadwal`
@@ -367,9 +373,9 @@ ALTER TABLE `dj`
   ADD PRIMARY KEY (`id_dj`);
 
 --
--- Indexes for table `editable`
+-- Indexes for table `event`
 --
-ALTER TABLE `editable`
+ALTER TABLE `event`
   ADD PRIMARY KEY (`id_event`);
 
 --
@@ -382,7 +388,8 @@ ALTER TABLE `faq`
 -- Indexes for table `guest`
 --
 ALTER TABLE `guest`
-  ADD PRIMARY KEY (`id_guest`);
+  ADD PRIMARY KEY (`id_guest`),
+  ADD KEY `id_event` (`id_event`);
 
 --
 -- Indexes for table `jadwal`
@@ -395,12 +402,6 @@ ALTER TABLE `jadwal`
 --
 ALTER TABLE `sponsor`
   ADD PRIMARY KEY (`id_sponsor`);
-
---
--- Indexes for table `status`
---
-ALTER TABLE `status`
-  ADD PRIMARY KEY (`id_status`);
 
 --
 -- Indexes for table `talent`
@@ -435,7 +436,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `admin`
 --
 ALTER TABLE `admin`
-  MODIFY `id_admin` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_admin` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `detail_jadwal`
@@ -447,7 +448,7 @@ ALTER TABLE `detail_jadwal`
 -- AUTO_INCREMENT for table `detail_transaksi`
 --
 ALTER TABLE `detail_transaksi`
-  MODIFY `id_detail` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id_detail` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `dj`
@@ -456,16 +457,16 @@ ALTER TABLE `dj`
   MODIFY `id_dj` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `editable`
+-- AUTO_INCREMENT for table `event`
 --
-ALTER TABLE `editable`
+ALTER TABLE `event`
   MODIFY `id_event` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `faq`
 --
 ALTER TABLE `faq`
-  MODIFY `id_faq` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_faq` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `guest`
@@ -477,19 +478,13 @@ ALTER TABLE `guest`
 -- AUTO_INCREMENT for table `jadwal`
 --
 ALTER TABLE `jadwal`
-  MODIFY `id_jadwal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_jadwal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `sponsor`
 --
 ALTER TABLE `sponsor`
   MODIFY `id_sponsor` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
--- AUTO_INCREMENT for table `status`
---
-ALTER TABLE `status`
-  MODIFY `id_status` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `talent`
@@ -507,7 +502,7 @@ ALTER TABLE `tiket`
 -- AUTO_INCREMENT for table `transaksi`
 --
 ALTER TABLE `transaksi`
-  MODIFY `id_transaksi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id_transaksi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `user`
@@ -518,12 +513,6 @@ ALTER TABLE `user`
 --
 -- Constraints for dumped tables
 --
-
---
--- Constraints for table `admin`
---
-ALTER TABLE `admin`
-  ADD CONSTRAINT `admin_ibfk_1` FOREIGN KEY (`id_status`) REFERENCES `status` (`id_status`);
 
 --
 -- Constraints for table `detail_jadwal`
@@ -537,6 +526,12 @@ ALTER TABLE `detail_jadwal`
 ALTER TABLE `detail_transaksi`
   ADD CONSTRAINT `detail_transaksi_ibfk_2` FOREIGN KEY (`id_transaksi`) REFERENCES `transaksi` (`id_transaksi`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `detail_transaksi_ibfk_3` FOREIGN KEY (`id_tiket`) REFERENCES `tiket` (`id_tiket`);
+
+--
+-- Constraints for table `guest`
+--
+ALTER TABLE `guest`
+  ADD CONSTRAINT `guest_ibfk_1` FOREIGN KEY (`id_event`) REFERENCES `event` (`id_event`);
 
 --
 -- Constraints for table `transaksi`
