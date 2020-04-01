@@ -43,15 +43,31 @@ class login_model extends CI_Model {
             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
             <i class="fa fa-times-circle"></i> Password Salah!
             </div>');
-            redirect('login');
+            redirect('log/login');
         }
         else{
             $this->session->set_flashdata('notif','<div class="alert alert-danger alert-dismissible" role="alert">
             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
             <i class="fa fa-times-circle"></i> Akun Tidak Ditemukan!
             </div>');
-            redirect('login');
+            redirect('log/login');
         }
+    }
+
+    public function registration(){
+        $data=[
+            'nama_user' => $this->input->post('name'),
+            'email' => $this->input->post('email'),
+            'password' => $this->input->post('password1'),
+            'telepon' => $this->input->post('telepon'),
+            'tgl_lahir' => $this->input->post('tgl_lahir'),
+            'created_at' => time(),
+        ]; 
+        $this->db->insert('user', $data);
+        $this->session->set_flashdata('notif','<div class="alert alert-info alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+            <i class="fa fa-check"></i> Akun telah dibuat, silahkan login!
+            </div>');
     }
 
 }

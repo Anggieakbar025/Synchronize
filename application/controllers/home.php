@@ -12,11 +12,12 @@ class home extends CI_Controller {
 
     public function index()
     {
-        $this->load->view('user/landing_page');
+        $this->load->view('user/landing_test');
     }
     
     public function home()
     {
+        $data['galeri'] = $this->home_model->getGaleri();
         $data['tiket'] = $this->home_model->getTiket();
         $data['guest'] = $this->gs_model->getGuest();
         $data['konten'] = $this->home_model->getKonten();

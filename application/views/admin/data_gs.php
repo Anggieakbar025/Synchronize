@@ -44,14 +44,27 @@
 				<div class="col-md-5 col-lg-3">
 					<div class="card" style="height: 500px;">
 						<img src="<?php echo base_url('/assets/images/gs/'.$g->gambar) ?>" height="180px" />
-						<div class="card-body">
-							<h6 class="card-title text-center"><b><?php echo $g->nama_guest ?></b></h6>
-							<p class="card-text text-center text-primary">Genre : <?php echo $g->genre ?></p>
-							<p class="card-text text-left"><?php echo $g->deskripsi ?></p>
-							<a href="" class="btn btn-sm btn-block btn-light text-center" data-toggle="modal"
-								data-target="#ubah_data" onclick="prepare_ubah('.$g->id_guest.')"><i
-									class="fa fa-fw fa-info-circle"></i><b> Info </b> </a>
-							<a href="" class="btn btn-sm btn-block btn-danger text-center" data-toggle="modal" data-target="#hapus_data">Hapus</a>
+						<div class="card-body" >
+							<div class="row mb-3">
+								<div class="col-lg-12">
+									<h6 style="margin-bottom: 3% !important;" class="card-title text-center"><b><?php echo $g->nama_guest ?></b></h6>
+									<p class="card-text text-center text-primary">Genre : <?php echo $g->genre ?></p>
+									<div class="row mb-3" style="overflow: auto !important;height: 130px;">
+										<div class="col-md-12">
+											<p  class="card-text text-left"><?php echo $g->deskripsi ?></p>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-12">
+									<a href="" class="btn btn-sm btn-block btn-light text-center" data-toggle="modal"
+										data-target="#ubah_data" onclick="prepare_ubah('.$g->id_guest.')"><i
+											class="fa fa-fw fa-info-circle"></i><b> Info </b> </a>
+									<a href="" class="btn btn-sm btn-block btn-danger text-center" data-toggle="modal"
+										data-target="#hapus_data">Hapus</a>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -205,7 +218,8 @@
 			</div>
 			<div class="modal-footer">
 
-				<a href="<?= base_url('admin/guest_star/delete'); ?>/<?= $g->id_guest ?>" class="btn btn-danger">Hapus</a>
+				<a href="<?= base_url('admin/guest_star/delete'); ?>/<?= $g->id_guest ?>"
+					class="btn btn-danger">Hapus</a>
 			</div>
 		</div>
 	</div>

@@ -42,6 +42,22 @@ class login extends CI_Controller {
         </div>');
         redirect('log/login');
     }
+
+    public function registration(){
+        
+        $this->form_validation->set_rules('name', 'Nama', 'trim|required|min_length[5]');
+        $this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email|is_unique[user.email]');
+        $this->form_validation->set_rules('password1', 'Password', 'trim|required|min_length[5]|matches[password2]');
+        $this->form_validation->set_rules('password2', 'Password', 'trim|required|min_length[5]|matches[password1]');
+        $this->form_validation->set_rules('telepon', 'Telepon', 'trim|required');
+        $this->form_validation->set_rules('tgl_lahir', 'Tanggal Lahir', 'trim|required');
+        if($this->form_validation->run()==FALSE){
+            $this->load->view('log/register');
+        }else{
+            $this->login->registration();
+            redirect('log/login');
+        }
+    }
 }
 
 /* End of file login.php */

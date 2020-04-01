@@ -214,6 +214,7 @@
                         </a>
                         <ul aria-expanded="false">
                             <li><a href="<?= base_url('admin/admin') ?>">Data Admin</a></li>
+                            <li><a href="<?= base_url('admin/member') ?>">Data Member</a></li>
                             <li><a href="<?= base_url('admin/guest_star') ?>">Data Guest</a></li>
                             <li><a href="<?= base_url('admin/tiket') ?>">Data Tiket</a></li>
                             <li><a href="<?= base_url('admin/dj') ?>">Data DJ</a></li>
@@ -231,7 +232,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="<?= base_url('user/editable_home') ?>" aria-expanded="false">
+                        <a href="<?= base_url('admin/editable_home') ?>" aria-expanded="false">
                             <i class="fa fa-fw fa-home"></i><span class="nav-text">Ubah Tampilan User</span>
                         </a>
                     </li>

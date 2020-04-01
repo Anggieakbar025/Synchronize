@@ -137,6 +137,6 @@ $autoload['model'] = array(
     'user/home_model' => 'home_model',
     'admin/admin_model' => 'admin',
     'dj/dj_model' => 'dj_model',
-    'user/editable_model' => 'editable_model',
+    'admin/editable_model' => 'editable_model',
     'log/login_model' => 'login'
 );

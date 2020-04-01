@@ -1,9 +1,9 @@
 <?php 
 	foreach ($konten as $main ) {
-		$logo = $main['logo_event'];
 		$about = $main['about_event'];
 		$venue = $main['venue'];
 		$location = $main['location_venue'];
+		$tanggal = $main['tanggal'];
 	}
 
 ?>
@@ -110,7 +110,7 @@
 	<section id="intro">
 		<div class="intro-container wow fadeIn">
 			<p class="mb-4 pb-0">Next Event : </p>
-			<img class="pb-0 event-img" src="<?= base_url(); ?>assets/img/logo/<?= $logo; ?>" alt="" title=""
+			<img class="pb-0 event-img" src="<?= base_url(); ?>assets/img/logo/OH NAIS LOGO 2.png" alt="" title=""
 				height="390px">
 			<a href="www.youtube.com" class="venobox play-btn mb-4" data-vbtype="video" data-autoplay="true"></a>
 			<a href="#buy-tickets" class="about-btn scrollto">Buy Ticket</a>
@@ -137,7 +137,13 @@
 					</div>
 					<div class="col-lg-3 pl-4">
 						<h3>When</h3>
-						<p>Friday,<br>21 Februari 2020</p>
+						<p>
+						<?php
+							$date = date_create($tanggal);
+							$tampil = date_format($date, "D, d M Y");
+							echo $tampil.'<br>'.$venue;
+						?>
+						</p>
 					</div>
 				</div>
 			</div>
@@ -221,7 +227,7 @@
 							<div class="col-md-2 mt-3"><time><?= $dj['waktu']; ?></time></div>
 							<div class="col-md-10">
 								<div class="guest">
-									<img class="" src="<?= base_url(); ?>assets/img/default.png">
+									<img class="" src="<?= base_url(); ?>assets/img/schedule/<?= $dj['gambar'] ?>">
 								</div>
 								<h4><?= $dj['kegiatan']; ?></h4>
 								<p><?= $dj['deskripsi_kegiatan']; ?></p>
@@ -237,13 +243,13 @@
 		</section>
 
 	<!--==========================
-    Intro Section
+    Countdown Section
   	============================-->
 	  <section id="about">
 			<div class="container wow fadeInUp mt-3 mb-3">
 				<div class="row">
 					<div class="col-md-12">
-						<h2 class="text-center">Countdown to <span>UN</span></h2>
+						<h2 class="text-center">Countdown to <span>Event</span></h2>
 						<div class="countdown">
 							<div id="hari"></div>
 							<div id="jam"></div>
@@ -371,22 +377,11 @@
 			</div>
 
 			<div class="owl-carousel gallery-carousel">
-				<a href="<?= base_url(); ?>assets/img/default.png" class="venobox" data-gall="gallery-carousel"><img
-						height="200" width="250" src="<?= base_url(); ?>assets/img/default.png" alt=""></a>
-				<a href="<?= base_url(); ?>assets/img/default.png" class="venobox" data-gall="gallery-carousel"><img
-						height="200" width="250" src="<?= base_url(); ?>assets/img/default.png" alt=""></a>
-				<a href="<?= base_url(); ?>assets/img/default.png" class="venobox" data-gall="gallery-carousel"><img
-						height="200" width="250" src="<?= base_url(); ?>assets/img/default.png" alt=""></a>
-				<a href="<?= base_url(); ?>assets/img/default.png" class="venobox" data-gall="gallery-carousel"><img
-						height="200" width="250" src="<?= base_url(); ?>assets/img/default.png" alt=""></a>
-				<a href="<?= base_url(); ?>assets/img/default.png" class="venobox" data-gall="gallery-carousel"><img
-						height="200" width="250" src="<?= base_url(); ?>assets/img/default.png" alt=""></a>
-				<a href="<?= base_url(); ?>assets/img/default.png" class="venobox" data-gall="gallery-carousel"><img
-						height="200" width="250" src="<?= base_url(); ?>assets/img/default.png" alt=""></a>
-				<a href="<?= base_url(); ?>assets/img/default.png" class="venobox" data-gall="gallery-carousel"><img
-						height="200" width="250" src="<?= base_url(); ?>assets/img/default.png" alt=""></a>
-				<a href="<?= base_url(); ?>assets/img/default.png" class="venobox" data-gall="gallery-carousel"><img
-						height="200" width="250" src="<?= base_url(); ?>assets/img/default.png" alt=""></a>
+				<?php foreach ($galeri as $a ) : ?>
+				<a href="" class="venobox" data-gall="gallery-carousel"><img
+						height="200" width="250" src="<?= base_url(); ?>assets/images/galeri/<?= $a['gambar'] ?>"></a>
+				
+						<?php endforeach; ?>
 			</div>
 			<div class="detail-content mt-3">
 				<a href="<?= base_url('user/gallery') ?>" class="detail">See More</a>
@@ -398,7 +393,6 @@
       Sponsors Section
     ============================-->
 		<section id="supporters" class="section-with-bg wow fadeInUp">
-
 			<div class="container mt-5">
 				<div class="section-header">
 					<h2>Sponsors</h2>
@@ -407,7 +401,7 @@
 					<?php foreach ($sponsor as $s ) : ?>
 					<div class="col-lg-3 col-md-4 col-xs-6">
 						<div class="supporter-logo">
-							<img src="<?= base_url(); ?>assets/images/sponsor/<?= $s['logo_sponsor'] ?>"
+							<img src="<?= base_url(); ?>assets/img/sponsor/<?= $s['logo_sponsor'] ?>"
 								class="img-fluid-sponsor">
 
 						</div>
@@ -415,7 +409,6 @@
 					<?php endforeach; ?>
 				</div>
 			</div>
-
 		</section>
 
 		<!--==========================
@@ -523,8 +516,14 @@
 
 	<a href="#" class="back-to-top"><i class="fa fa-angle-up"></i></a>
 
+	<?php
+		$date = date_create($tanggal);
+		$tampil = date_format($date, "d M Y");
+		echo '<div style="display: none;" id="tanggal">'.$tampil.'</div>';
+	?>
 	<script type="text/javascript">
-		var countDate = new Date('16 Mar 2020').getTime();
+		var tanggal = document.getElementById('tanggal').innerHTML;
+		var countDate = new Date(tanggal).getTime();
 
 		function countdown() {
 			var now = new Date().getTime();
@@ -544,11 +543,18 @@
 			document.getElementById('jam').innerText = j;
 			document.getElementById('menit').innerText = m;
 			document.getElementById('detik').innerText = d;
+
+			var kondisi = parseInt(h) == 0 && parseInt(j) == 0 && parseInt(m) == 0 && parseInt(d) == 0
+
+			if(kondisi){
+				clearInterval(start);
+			}
 		}
 
-		setInterval(function(){
+		var start = setInterval(function(){
 			countdown();
-		}, 1200);
+		}, 1000);
+
 	</script>
 
 	<!-- JavaScript Libraries -->

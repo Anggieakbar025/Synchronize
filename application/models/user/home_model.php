@@ -8,6 +8,10 @@ class home_model extends CI_Model {
     {
       return $this->db->get('dj')->result_array();
     }
+    public function getGaleri()
+    {
+      return $this->db->get('galeri')->result_array();
+    }
 
     public function getTiket()
     {
@@ -16,13 +20,9 @@ class home_model extends CI_Model {
 
     public function getKonten()
     {
-        $event = $this->db->query('SELECT MAX(id_event) as event_terkini FROM event')->result_array();
-        foreach ($event as $e ) {
-            $id_event = $e['event_terkini'];
-        }
         $this->db->select('*');
         $this->db->from('event');
-        $this->db->where('id_event', $id_event);
+        $this->db->where('status_event', 'aktif');
         return $this->db->get()->result_array();
     }
     
@@ -31,10 +31,10 @@ class home_model extends CI_Model {
         return $this->db->get('sponsor')->result_array();
     }
 
-    public function getHistory()
-    {
-        return $this->db->query('SELECT *, g.nama_guest, e.id_event FROM history h JOIN event e ON h.id_event = e.id_event JOIN guest g ON e.id_event = g.id_event')->result_array();
-    }
+    // public function getHistory()
+    // {
+    //     return $this->db->query('SELECT *, g.nama_guest, e.id_event FROM history h JOIN event e ON h.id_event = e.id_event JOIN guest g ON e.id_event = g.id_event')->result_array();
+    // }
 
     public function getHistoryPesan()
     {
@@ -44,8 +44,6 @@ class home_model extends CI_Model {
         $this->db->where('t.id_user', $_SESSION['id_user']);
         return $this->db->get()->result_array();
     }
-    
-
 
     public function getFaq()
     {
@@ -57,6 +55,7 @@ class home_model extends CI_Model {
         $this->db->select('*');
         $this->db->from('detail_jadwal j');
         $this->db->join('jadwal dj', 'j.id_jadwal = dj.id_jadwal');
+        $this->db->order_by('waktu', 'asc');
         
         return $this->db->get()->result_array();
     }

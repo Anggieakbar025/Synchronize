@@ -49,7 +49,7 @@
                                 
                                 <a class="text-center" href="index.html"> <img class="mb-2" src="<?= base_url('assets/images/synchronize.jpg') ?>" alt="images" width="150px"></a>
                                 <?= $this->session->flashdata('notif'); ?>
-                                <form class="mt-3 mb-5 login-input" action="<?= base_url('log/login'); ?>" method="post">
+                                <form class="mt-3 mb-2 login-input" action="<?= base_url('log/login'); ?>" method="post">
                                     <div class="form-group">
                                         <input type="text" name="email" class="form-control" placeholder="Email">
                                         <?= form_error('email','<h6 class="label label-danger text-left">','</h6>') ?>
@@ -59,8 +59,8 @@
                                         <?= form_error('password','<h6 class="label label-danger text-left">','</h6>') ?>
                                     </div>
                                     <button class="btn login-form__btn submit w-100" style="background-color: #ce5bc0;">Sign In</button>
+                                <b><a href="<?= base_url('log/login/registration') ?>" class="badge badge-secondary mt-4">Don't have an account? Register here!</a></b>
                                 </form>
-                                <p class="login-form__footer"><b>Please Login with your Synchronize Account !</b></p>
                             </div>
                         </div>
                     </div>

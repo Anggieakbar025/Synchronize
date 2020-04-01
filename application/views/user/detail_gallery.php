@@ -54,19 +54,24 @@
 				</div>
 			</div>
 		</section>
-
+		<?php foreach ($event as $e) { ?>
 		<section id="lineup" class="wow fadeInUp">
 			<div class="container">
 				<div class="section-header">
-					<h2>Oh Nais! Festival</h2>
+					<h2><?= $e->nama_event; ?></h2>
+					<p class="text-danger"><?= $e->venue; ?></p>
+					<p><?= $e->tanggal; ?></p>
 				</div>
-
-				<div class="row">
-					<?php foreach ($guest as $gs) : ?>
+				<div class="">
+				<div class="header">
+					<h3 class="text-center mb-3">Guest Star</h3>
+				</div>
+				<div class="row" id="<?= $e->id_event; ?>">
+					<?php foreach ($guest as $g) {
+						if($e->id_event == $g->id_event){ ?>
 					<div class="col-lg-4 col-md-6">
 						<div class="guest">
-							
-								<img src="<?= base_url(); ?>assets/img/default.png" alt="Speaker 1"
+								<img src="<?php echo base_url('/assets/images/gs/'.$g->gambar) ?>" alt="Speaker 1"
 									class="img-fluid-guest">
 							
 							<div class="details">
@@ -81,43 +86,29 @@
 							</div>
 						</div>
 					</div>
-					<?php endforeach; ?>
+					<?php }} ?>
 				</div>
 			</div>
 
-		</section>
-
-		<section id="lineup" class="wow fadeInUp">
-			<div class="container">
-				<div class="section-header">
-					<h2>Nanax Fest</h2>
-				</div>
-
-				<div class="row">
-					<?php foreach ($guest as $gs) : ?>
-					<div class="col-lg-4 col-md-6">
-						<div class="guest">
-							
-								<img src="<?= base_url(); ?>assets/img/default.png" alt="Speaker 1"
-									class="img-fluid-guest">
-							
-							<div class="details">
-								<h3><a href="<?= base_url('home/lineup'); ?>"><?= $gs['nama_guest']; ?></a></h3>
-								<p><?= $gs['genre']; ?></p>
-								<div class="social">
-									<a href=""><i class="fa fa-twitter"></i></a>
-									<a href=""><i class="fa fa-facebook"></i></a>
-									<a href=""><i class="fa fa-google-plus"></i></a>
-									<a href=""><i class="fa fa-linkedin"></i></a>
-								</div>
-							</div>
-						</div>
-					</div>
-					<?php endforeach; ?>
+			<div class="mt-2">
+			<div class="header mb-2">
+				<h3 class="text-center mb-3">Gallery</h3>
+			</div>
+			<div class="row" id="<?= $e->id_event; ?>">
+				<?php foreach ($gambar as $a) {
+					if($e->id_event == $a->id_event){ ?>
+				<div class="col-lg-3 col-md-6">
+					<div class="guest">
+							<img src="<?php echo base_url('/assets/images/galeri/'.$a->gambar) ?>" width="300" height="200">
 				</div>
 			</div>
+						<?php } } ?>
+		</div>
 
+	</div>
 		</section>
+		<?php  } ?>
+
 	</main>
 
 	<!--==========================

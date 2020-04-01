@@ -12,7 +12,10 @@ class guest_star_model extends CI_Model {
 
 	public function getGuest()
     {
-        return $this->db->get('guest')->result_array();
+		$this->db->select('*');
+		$this->db->from('guest');
+		$this->db->where('status', 'aktif');
+        return $this->db->get()->result_array();
     }
 
     public function getLineup($id)

@@ -20,11 +20,12 @@ a:hover{
 section{
   position: relative;
   height: 100%;
+  width: 100%;
   display: flex;
   background-color: rgb(13, 10, 39);
 }
 
-section .screen{
+section  .screen{
   position: relative;
   flex-grow: 2;
   display: flex;
@@ -34,14 +35,14 @@ section .screen{
   transition: 1s;
 }
 
-section .screen:nth-child(1)
+section  #eo
 {
   background:url("../img/event.png") top center no-repeat;
   opacity: 0.8;
   background-position: center;
   background-size: cover;
 }
-section .screen:nth-child(2)
+section  #dj
 {
   background:url("../img/dj.png") top center no-repeat;
   opacity: 0.8;
@@ -52,12 +53,12 @@ section:hover .screen{
   opacity: 0.2;
 }
 
-section .screen:hover{
+section  .screen:hover{
   flex-grow: 4;
   opacity: 1;
 }
 
-section .screen .content{
+section  .screen .content{
   position: relative;
   width: 250px;
   height: 250px;
@@ -68,12 +69,12 @@ section .screen .content{
   justify-content: center;
   margin-right: 10%;
 }
-section .screen .content:hover{
+section  .screen .content:hover{
   transform: scale(0.8);
-  transform: translate(100%);
+  transform: translate(0%);
   color: white;
 }
-section .screen:hover .content{
+section  .screen:hover .content{
   margin-right: 0%;
   transform: translate(0);
   transition-delay: 0.5s;
@@ -82,9 +83,21 @@ section .screen:hover .content{
 	box-shadow: 0 20px 55px rgba(0, 0, 0, 0.14), 0 15px 35px rgba(0, 0, 0, 0.14);
 }
 
-section .screen .content h2{
+section  .screen .content h2{
   margin-top: 62px;
   text-transform: uppercase;
   font-size: 25px;
   color: white;
+}
+
+@media (max-width: 800px) {
+	.screen {
+		height: 50%;
+	}
+}
+
+@media (min-height: 1300px){
+	.screen {
+		height: 50%;
+	}
 }

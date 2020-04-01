@@ -9,12 +9,22 @@ class Dj_model extends CI_Model {
 		return $this->db->get('dj')
 						->result();
 	}
+	public function show($id_dj)
+	{
+		$data = $this->db->query("SELECT * FROM dj WHERE id_dj = $id_dj");
+		return $data->result_array();
+	}
+	public function get_dj_detail($id_dj)
+	{
+		$data = $this->db->query("SELECT * FROM dj WHERE id_dj = $id_dj");
+		return $data->result();
+	}
 
 	// Fungsi untuk melakukan proses upload file
 	public function upload(){
 
-		$configVideo['upload_path'] = './assets/videos/';
-		$configVideo['allowed_types'] = 'avi|wmv|mp3|mp4';
+		$configVideo['upload_path'] = './assets/images/dj/';
+		$configVideo['allowed_types'] = 'jpg|png|jpeg';
 		$configVideo['max_size']	= '0';
 		$configVideo['max_filename'] = '255';
 		$configVideo['encrypt_name'] = FALSE;
@@ -37,10 +47,10 @@ class Dj_model extends CI_Model {
 	public function save($upload){
 		$data = array(
 			'nama_dj'=>$this->input->post('nama_dj'),
-			'since'=>$this->input->post('since'),
+			'nickname'=>$this->input->post('nickname'),
 			'genre'=>$this->input->post('genre'),
 			'birth'=>$this->input->post('birth'),
-			'alamat'=>$this->input->post('alamat'),
+			'kota'=>$this->input->post('kota'),
 			'sosmed'=>$this->input->post('sosmed'),
 			'video' => $upload['file']['file_name']
 		);
@@ -57,6 +67,16 @@ class Dj_model extends CI_Model {
 		return $this->db->where('id_dj', $id)
 						->get('dj')
 						->row();
+	}
+	public function show_malang()
+	{
+		$data = $this->db->query("SELECT * FROM dj WHERE kota like '%Malang%'");
+		return $data->result();
+	}
+	public function show_jember()
+	{
+		$data = $this->db->query("SELECT * FROM dj WHERE kota like '%Jember%'");
+		return $data->result();
 	}
 
 }

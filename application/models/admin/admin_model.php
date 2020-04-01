@@ -39,4 +39,17 @@ class admin_model extends CI_Model {
         $this->db->join('user u', 't.id_user = u.id_user');
         return $this->db->get()->result_array();
     }
+
+    public function data_member(){
+        
+        $this->db->select('*');
+        $this->db->from('user');
+        return $this->db->get()->result_array();
+    }
+
+    public function cetak_member(){
+        $this->db->select('*');
+        $this->db->from('user');
+        return $this->db->get()->result_array();
+    }
 }
