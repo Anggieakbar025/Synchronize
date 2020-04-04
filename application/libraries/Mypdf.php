@@ -13,7 +13,7 @@ class Mypdf
         $this->ci =& get_instance();
     }
 
-    public function generate($view, $data = array(),$filename='Laporan Barang',$paper='A4',$orientation='portrait')
+    public function generate($view, $data = array(),$filename='Laporan Tiket',$paper='A4',$orientation='portrait')
     {
         $dompdf = new Dompdf();
         $html= $this->ci->load->view($view,$data,TRUE);

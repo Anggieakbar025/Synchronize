@@ -89,34 +89,40 @@ class home extends CI_Controller {
             $this->home_model->pesan();
             $this->cart->destroy();
 
-            $config = array(
-                'protocol' => 'smtp',
-                'smtp_host'     => 'ssl://smtp.googlemail.com',
-                'smtp_port'     => 465,
-                'smtp_user'     => 'anggieakbar025@gmail.com',
-                'smtp_pass'     => 'abyan789',
-                'mailtype'      => 'html',
-                'charset'       => 'iso-8859-1'
-            );
-
+            $from_email = 'satriowicaksono076@gmail.com';
+            $to_email = 'anggieakbar025@gmail.com';
+   
+            $config = Array(
+                   'protocol' => 'smtp',
+                   'smtp_host' => 'ssl://smtp.googlemail.com',
+                   'smtp_port' => 465,
+                   'smtp_user' => $from_email,
+                   'smtp_pass' => 'gedhekcz82/',
+                   'mailtype'  => 'html',
+                   'charset'   => 'iso-8859-1'
+           );
+   
             $this->load->library('email', $config);
-
-            $this->email->set_newline("\n\n");
-            
-            $this->email->from('anggieakbar025@gmail.com', 'Anggie');
-            $this->email->to('anggieakbar09@gmail.com');
-            
+            $this->email->set_newline("\r\n");
+   
+            $this->email->from($from_email);
+            $this->email->to($to_email);
             $this->email->subject('Konfirmasi Pembelian');
-            $this->email->message('Terima kasih sudah membeli tiket melalui aplikasi kami. Segera lakukan pembayaran.');
+            $this->email->message('Pesanan Anda sudah berhasil diproses, mohon segera lakukan pembayaran.');
+   
+            //Send mail
+            if($this->email->send()){
+                $this->session->set_flashdata('terbeli','<div class="alert alert-success alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <i class="fa fa-check-circle"></i> Berhasil membeli tiket!</div>');
+                redirect('user/profil','refresh');
+            }else {
+                $this->session->set_flashdata('terbeli','<div class="alert alert-success alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <i class="fa fa-check-circle"></i> Berhasil membeli tiket tanpa email! </div>');
+                redirect('user/profil','refresh');
+            }
             
-            return $this->email->send();
-
-            
-            $this->session->set_flashdata('terbeli','<div class="alert alert-success alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
-            <i class="fa fa-check-circle"></i> Berhasil membeli tiket!
-            </div>');
-            redirect('user/profil','refresh');
         } else {
             $this->session->set_flashdata('gagal_pesan', 'Pesanan Gagal Dibuat');
             redirect('user/checkout','refresh');
