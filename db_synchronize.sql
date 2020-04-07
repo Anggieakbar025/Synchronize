@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 01, 2020 at 10:24 AM
+-- Generation Time: Apr 07, 2020 at 03:10 PM
 -- Server version: 10.1.38-MariaDB
 -- PHP Version: 7.3.3
 
@@ -48,28 +48,25 @@ INSERT INTO `admin` (`id_admin`, `nama`, `email`, `password`, `aktif`, `created_
 -- --------------------------------------------------------
 
 --
--- Table structure for table `detail_jadwal`
+-- Table structure for table `akses`
 --
 
-CREATE TABLE `detail_jadwal` (
-  `id_detail_jadwal` int(11) NOT NULL,
-  `kegiatan` varchar(225) NOT NULL,
-  `deskripsi_kegiatan` varchar(225) NOT NULL,
-  `waktu` time NOT NULL,
-  `gambar` text,
-  `id_jadwal` int(11) NOT NULL
+CREATE TABLE `akses` (
+  `id_akses` int(11) NOT NULL,
+  `akses` varchar(255) NOT NULL,
+  `harga` varchar(128) NOT NULL,
+  `stok` int(11) NOT NULL,
+  `id_tiket` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `detail_jadwal`
+-- Dumping data for table `akses`
 --
 
-INSERT INTO `detail_jadwal` (`id_detail_jadwal`, `kegiatan`, `deskripsi_kegiatan`, `waktu`, `gambar`, `id_jadwal`) VALUES
-(1, 'Open Gate', 'Open Gate and Check In Session', '16:30:00', 'default.png', 1),
-(3, 'Open Gate', 'Open Gate and Checking Session', '16:00:00', 'default1.png', 2),
-(6, 'Febi Putri', 'Febi Putri on Stage', '17:30:00', 'feby1.jpg', 2),
-(7, 'Ardhito Pramono', 'Ardhito Pramono on Stage', '17:00:00', 'ardhito1.jpg', 1),
-(9, 'Persiapan', 'Meet Up All Crew', '15:00:00', NULL, 1);
+INSERT INTO `akses` (`id_akses`, `akses`, `harga`, `stok`, `id_tiket`) VALUES
+(1, 'One Day Access', '50000', 100, 3),
+(2, 'Full Day Access', '100000', 50, 3),
+(3, 'One Day Access', '75000', 25, 4);
 
 -- --------------------------------------------------------
 
@@ -79,7 +76,8 @@ INSERT INTO `detail_jadwal` (`id_detail_jadwal`, `kegiatan`, `deskripsi_kegiatan
 
 CREATE TABLE `detail_transaksi` (
   `id_detail` int(11) NOT NULL,
-  `id_tiket` int(11) NOT NULL,
+  `id_akses` int(11) NOT NULL,
+  `qty` int(11) NOT NULL,
   `id_transaksi` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -87,36 +85,9 @@ CREATE TABLE `detail_transaksi` (
 -- Dumping data for table `detail_transaksi`
 --
 
-INSERT INTO `detail_transaksi` (`id_detail`, `id_tiket`, `id_transaksi`) VALUES
-(2, 1, 13),
-(3, 1, 13),
-(4, 1, 13),
-(5, 1, 13),
-(6, 1, 13),
-(7, 1, 14),
-(8, 1, 14),
-(9, 1, 14),
-(10, 1, 14),
-(11, 2, 15),
-(12, 2, 15),
-(13, 1, 16),
-(14, 1, 17),
-(15, 1, 18),
-(16, 1, 18),
-(17, 1, 19),
-(18, 1, 20),
-(19, 1, 20),
-(20, 1, 21),
-(21, 1, 22),
-(22, 1, 22),
-(23, 1, 23),
-(24, 1, 23),
-(25, 1, 24),
-(26, 1, 24),
-(27, 1, 25),
-(28, 1, 26),
-(29, 1, 27),
-(30, 1, 27);
+INSERT INTO `detail_transaksi` (`id_detail`, `id_akses`, `qty`, `id_transaksi`) VALUES
+(44, 1, 2, 4),
+(45, 2, 1, 4);
 
 -- --------------------------------------------------------
 
@@ -169,14 +140,15 @@ CREATE TABLE `event` (
 --
 
 INSERT INTO `event` (`id_event`, `nama_event`, `about_event`, `venue`, `location_venue`, `tanggal`, `status_event`) VALUES
-(2, 'Oh! Nais Festival', 'Festival musik yang dipadukan dengan berbagai rangkaian acara yang dikemas secara seru.', 'Graha Cakrawala - Universitas Negeri Malang', 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14262.087279349189!2d112.6110546315304!3d-7.957466273883397!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.	1!3m3!1m2!1s0x2e78827f0d7f025b%3A0x92aef5088187b798!2sGraha%20Cakrawala%20UM!5e1!3m2!1sid!2sid!4v1577008694488!5m2!1sid!2sid', '2020-07-30', 'aktif');
+(2, 'Oh! Nais Festival', 'Festival musik yang dipadukan dengan berbagai rangkaian acara yang dikemas secara seru.', 'Graha Cakrawala - Universitas Negeri Malang', 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14262.087279349189!2d112.6110546315304!3d-7.957466273883397!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.	1!3m3!1m2!1s0x2e78827f0d7f025b%3A0x92aef5088187b798!2sGraha%20Cakrawala%20UM!5e1!3m2!1sid!2sid!4v1577008694488!5m2!1sid!2sid', '2020-07-30', 'aktif'),
+(3, 'Oh! Yes or No', 'Let\'s dance with us', 'UMM Dome', 'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d31611.957596647226!2d112.6440299!3d-7.9477204!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e78818b2e1a1555%3A0xbd7b5a20b30efc24!2sUMM%20Dome!5e0!3m2!1sen!2sid!4v1586260347134!5m2!1sen!2sid', '2020-04-17', 'aktif');
 
 --
 -- Triggers `event`
 --
 DELIMITER $$
-CREATE TRIGGER `TG_GANTI_EVENT` AFTER INSERT ON `event` FOR EACH ROW BEGIN
-    UPDATE guest SET status = 'selesai' WHERE status = 'aktif';
+CREATE TRIGGER `TG_GANTI_EVENT` AFTER UPDATE ON `event` FOR EACH ROW BEGIN
+    UPDATE guest SET status = NEW.status_event WHERE id_event = NEW.id_event;
 END
 $$
 DELIMITER ;
@@ -256,16 +228,19 @@ INSERT INTO `guest` (`id_guest`, `nama_guest`, `deskripsi`, `genre`, `gambar`, `
 
 CREATE TABLE `jadwal` (
   `id_jadwal` int(11) NOT NULL,
-  `hari` int(11) NOT NULL
+  `kegiatan` varchar(225) NOT NULL,
+  `deskripsi_kegiatan` varchar(225) NOT NULL,
+  `waktu` datetime NOT NULL,
+  `gambar` text,
+  `id_event` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `jadwal`
 --
 
-INSERT INTO `jadwal` (`id_jadwal`, `hari`) VALUES
-(1, 1),
-(2, 2);
+INSERT INTO `jadwal` (`id_jadwal`, `kegiatan`, `deskripsi_kegiatan`, `waktu`, `gambar`, `id_event`) VALUES
+(10, 'Meet Up All Crew', 'Cross Check seluruh kesiapan event', '2020-05-08 15:00:00', NULL, 2);
 
 -- --------------------------------------------------------
 
@@ -311,17 +286,16 @@ CREATE TABLE `talent` (
 CREATE TABLE `tiket` (
   `id_tiket` int(11) NOT NULL,
   `kelas` varchar(225) NOT NULL,
-  `harga` int(11) NOT NULL,
-  `stok` int(11) NOT NULL
+  `id_event` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `tiket`
 --
 
-INSERT INTO `tiket` (`id_tiket`, `kelas`, `harga`, `stok`) VALUES
-(1, 'All in One', 100000, 10),
-(2, 'VVIP', 150000, 5);
+INSERT INTO `tiket` (`id_tiket`, `kelas`, `id_event`) VALUES
+(3, 'Presale 1', 2),
+(4, 'Presale 2', 2);
 
 -- --------------------------------------------------------
 
@@ -333,6 +307,7 @@ CREATE TABLE `transaksi` (
   `id_transaksi` int(11) NOT NULL,
   `id_user` int(11) NOT NULL,
   `qty` int(11) NOT NULL,
+  `total` varchar(128) NOT NULL,
   `tanggal` int(11) NOT NULL,
   `status` enum('beli','bayar','batal','selesai') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -341,24 +316,8 @@ CREATE TABLE `transaksi` (
 -- Dumping data for table `transaksi`
 --
 
-INSERT INTO `transaksi` (`id_transaksi`, `id_user`, `qty`, `tanggal`, `status`) VALUES
-(11, 1, 2, 1577092619, 'beli'),
-(12, 1, 5, 1577092963, 'beli'),
-(13, 1, 5, 1577093141, 'beli'),
-(14, 1, 4, 1577351037, 'beli'),
-(15, 1, 2, 1580443931, 'beli'),
-(16, 1, 1, 1580632450, 'beli'),
-(17, 1, 1, 1580632577, 'beli'),
-(18, 1, 2, 1580632854, 'beli'),
-(19, 1, 1, 1580632905, 'beli'),
-(20, 1, 2, 1580633425, 'beli'),
-(21, 1, 1, 1580635448, 'beli'),
-(22, 1, 2, 1581159402, 'beli'),
-(23, 1, 2, 1582937895, 'beli'),
-(24, 1, 2, 1582938203, 'beli'),
-(25, 1, 1, 1582938558, 'beli'),
-(26, 1, 1, 1583495985, 'beli'),
-(27, 3, 2, 1585661232, 'selesai');
+INSERT INTO `transaksi` (`id_transaksi`, `id_user`, `qty`, `total`, `tanggal`, `status`) VALUES
+(4, 3, 3, '200000', 1586176276, 'selesai');
 
 -- --------------------------------------------------------
 
@@ -396,11 +355,11 @@ ALTER TABLE `admin`
   ADD PRIMARY KEY (`id_admin`);
 
 --
--- Indexes for table `detail_jadwal`
+-- Indexes for table `akses`
 --
-ALTER TABLE `detail_jadwal`
-  ADD PRIMARY KEY (`id_detail_jadwal`),
-  ADD KEY `id_jadwal` (`id_jadwal`);
+ALTER TABLE `akses`
+  ADD PRIMARY KEY (`id_akses`),
+  ADD KEY `id_tiket` (`id_tiket`);
 
 --
 -- Indexes for table `detail_transaksi`
@@ -408,7 +367,7 @@ ALTER TABLE `detail_jadwal`
 ALTER TABLE `detail_transaksi`
   ADD PRIMARY KEY (`id_detail`),
   ADD KEY `id_transaksi` (`id_transaksi`),
-  ADD KEY `id_tiket` (`id_tiket`);
+  ADD KEY `id_tiket` (`id_akses`);
 
 --
 -- Indexes for table `dj`
@@ -446,7 +405,8 @@ ALTER TABLE `guest`
 -- Indexes for table `jadwal`
 --
 ALTER TABLE `jadwal`
-  ADD PRIMARY KEY (`id_jadwal`);
+  ADD PRIMARY KEY (`id_jadwal`),
+  ADD KEY `id_jadwal` (`id_event`);
 
 --
 -- Indexes for table `sponsor`
@@ -464,7 +424,8 @@ ALTER TABLE `talent`
 -- Indexes for table `tiket`
 --
 ALTER TABLE `tiket`
-  ADD PRIMARY KEY (`id_tiket`);
+  ADD PRIMARY KEY (`id_tiket`),
+  ADD KEY `id_event` (`id_event`);
 
 --
 -- Indexes for table `transaksi`
@@ -490,16 +451,16 @@ ALTER TABLE `admin`
   MODIFY `id_admin` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT for table `detail_jadwal`
+-- AUTO_INCREMENT for table `akses`
 --
-ALTER TABLE `detail_jadwal`
-  MODIFY `id_detail_jadwal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+ALTER TABLE `akses`
+  MODIFY `id_akses` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `detail_transaksi`
 --
 ALTER TABLE `detail_transaksi`
-  MODIFY `id_detail` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id_detail` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
 -- AUTO_INCREMENT for table `dj`
@@ -511,7 +472,7 @@ ALTER TABLE `dj`
 -- AUTO_INCREMENT for table `event`
 --
 ALTER TABLE `event`
-  MODIFY `id_event` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_event` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `faq`
@@ -535,7 +496,7 @@ ALTER TABLE `guest`
 -- AUTO_INCREMENT for table `jadwal`
 --
 ALTER TABLE `jadwal`
-  MODIFY `id_jadwal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_jadwal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `sponsor`
@@ -553,13 +514,13 @@ ALTER TABLE `talent`
 -- AUTO_INCREMENT for table `tiket`
 --
 ALTER TABLE `tiket`
-  MODIFY `id_tiket` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_tiket` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `transaksi`
 --
 ALTER TABLE `transaksi`
-  MODIFY `id_transaksi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id_transaksi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `user`
@@ -572,17 +533,17 @@ ALTER TABLE `user`
 --
 
 --
--- Constraints for table `detail_jadwal`
+-- Constraints for table `akses`
 --
-ALTER TABLE `detail_jadwal`
-  ADD CONSTRAINT `detail_jadwal_ibfk_1` FOREIGN KEY (`id_jadwal`) REFERENCES `jadwal` (`id_jadwal`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `akses`
+  ADD CONSTRAINT `akses_ibfk_1` FOREIGN KEY (`id_tiket`) REFERENCES `tiket` (`id_tiket`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `detail_transaksi`
 --
 ALTER TABLE `detail_transaksi`
-  ADD CONSTRAINT `detail_transaksi_ibfk_2` FOREIGN KEY (`id_transaksi`) REFERENCES `transaksi` (`id_transaksi`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `detail_transaksi_ibfk_3` FOREIGN KEY (`id_tiket`) REFERENCES `tiket` (`id_tiket`);
+  ADD CONSTRAINT `detail_transaksi_ibfk_2` FOREIGN KEY (`id_transaksi`) REFERENCES `transaksi` (`id_transaksi`) ON DELETE CASCADE,
+  ADD CONSTRAINT `detail_transaksi_ibfk_3` FOREIGN KEY (`id_akses`) REFERENCES `akses` (`id_akses`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `galeri`
@@ -595,6 +556,18 @@ ALTER TABLE `galeri`
 --
 ALTER TABLE `guest`
   ADD CONSTRAINT `guest_ibfk_1` FOREIGN KEY (`id_event`) REFERENCES `event` (`id_event`);
+
+--
+-- Constraints for table `jadwal`
+--
+ALTER TABLE `jadwal`
+  ADD CONSTRAINT `jadwal_ibfk_1` FOREIGN KEY (`id_event`) REFERENCES `event` (`id_event`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `tiket`
+--
+ALTER TABLE `tiket`
+  ADD CONSTRAINT `tiket_ibfk_1` FOREIGN KEY (`id_event`) REFERENCES `event` (`id_event`);
 
 --
 -- Constraints for table `transaksi`
