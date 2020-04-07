@@ -14,7 +14,21 @@ class home extends CI_Controller {
     {
         $this->load->view('user/landing_test');
     }
+
+    public function getAkses()
+    {
+        $id = $this->input->post('id');
+        $dataTipe = $this->home_model->getAkses($id);
+        echo json_encode($dataTipe);
+    }
     
+    public function getMaps()
+    {
+        $id = $this->input->post('id');
+        $dataTipe = $this->home_model->getMaps($id);
+        echo json_encode($dataTipe);
+    }
+
     public function home()
     {
         $data['galeri'] = $this->home_model->getGaleri();
@@ -23,36 +37,33 @@ class home extends CI_Controller {
         $data['konten'] = $this->home_model->getKonten();
         $data['sponsor'] = $this->home_model->getSponsor();
         $data['jadwal'] = $this->home_model->getJadwal();
-        $data['detail_jadwal'] = $this->home_model->getDetailJadwal();
         $data['faq'] = $this->home_model->getFaq();
+        $data['kelas'] = $this->home_model->getKelasTiket();
         $this->load->view('template', $data);
     }
         
-    public function add_item($id)
+    public function add_item()
     {
         if(!isset($_SESSION['logged_in'])){
             redirect('log/login','refresh');
         } else {
-            $tiket = $this->home_model->getTiketCart($id);
             $qty = $this->input->post('qty');
-            $jumlah = $this->input->post('qty');
+            $id = $this->input->post('id_akses');
+            $tiket = $this->home_model->getTiketCart($id);
             
-            if ($qty != null) {
-                for ($qty = 1; $qty <= $jumlah; $qty++) {
-                    $data = array(
-                        'id'      => $id,
-                        'qty'     => 1,
-                        'price'   => $tiket->harga,
-                        'name'    => $tiket->kelas
-                    );
-                    
-                    $this->cart->insert($data);
-                }
-            }
-            redirect('user/checkout','refresh');
+            $data = array(
+                'id'      => $id,
+                'qty'     => $qty,
+                'price'   => $tiket->harga,
+                'name'    => $tiket->kelas,
+                'akses'   => $tiket->akses,
+            );
+            
+            $this->cart->insert($data);
         }
+        redirect('user/checkout','refresh');
     }
-
+    
     public function plusQty($id)
     {
         $tiket = $this->home_model->getTiketCart($id);
@@ -60,7 +71,8 @@ class home extends CI_Controller {
             'id'      => $id,
             'qty'     => 1,
             'price'   => $tiket->harga,
-            'name'    => $tiket->kelas
+            'name'    => $tiket->kelas,
+            'akses'   => $tiket->akses,
         );
         
         $this->cart->insert($data);
@@ -74,7 +86,8 @@ class home extends CI_Controller {
             'id'      => $id,
             'qty'     => -1,
             'price'   => $tiket->harga,
-            'name'    => $tiket->kelas
+            'name'    => $tiket->kelas,
+            'akses'   => $tiket->akses,
         );
         
         $this->cart->insert($data);
@@ -89,45 +102,38 @@ class home extends CI_Controller {
             $this->home_model->pesan();
             $this->cart->destroy();
 
-            $from_email = 'satriowicaksono076@gmail.com';
-            $to_email = 'anggieakbar025@gmail.com';
-   
-            $config = Array(
-                   'protocol' => 'smtp',
-                   'smtp_host' => 'ssl://smtp.googlemail.com',
-                   'smtp_port' => 465,
-                   'smtp_user' => $from_email,
-                   'smtp_pass' => 'gedhekcz82/',
-                   'mailtype'  => 'html',
-                   'charset'   => 'iso-8859-1'
-           );
-   
+            $config = array(
+                'protocol' => 'smtp',
+                'smtp_host'     => 'ssl://smtp.googlemail.com',
+                'smtp_port'     => 465,
+                'smtp_user'     => 'anggieakbar025@gmail.com',
+                'smtp_pass'     => 'abyan789',
+                'mailtype'      => 'html',
+                'charset'       => 'iso-8859-1'
+            );
+
             $this->load->library('email', $config);
-            $this->email->set_newline("\r\n");
-   
-            $this->email->from($from_email);
-            $this->email->to($to_email);
-            $this->email->subject('Konfirmasi Pembelian');
-            $this->email->message('Pesanan Anda sudah berhasil diproses, mohon segera lakukan pembayaran.');
-   
-            //Send mail
-            if($this->email->send()){
-                $this->session->set_flashdata('terbeli','<div class="alert alert-success alert-dismissible" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
-                <i class="fa fa-check-circle"></i> Berhasil membeli tiket!</div>');
-                redirect('user/profil','refresh');
-            }else {
-                $this->session->set_flashdata('terbeli','<div class="alert alert-success alert-dismissible" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
-                <i class="fa fa-check-circle"></i> Berhasil membeli tiket tanpa email! </div>');
-                redirect('user/profil','refresh');
-            }
+
+            $this->email->set_newline("\n\n");
             
+            $this->email->from('anggieakbar025@gmail.com', 'Anggie');
+            $this->email->to('anggieakbar09@gmail.com');
+            
+            $this->email->subject('Konfirmasi Pembelian');
+            $this->email->message('Terima kasih sudah membeli tiket melalui aplikasi kami. Segera lakukan pembayaran.');
+            
+            return $this->email->send();
+
+            
+            $this->session->set_flashdata('terbeli','<div class="alert alert-success alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+            <i class="fa fa-check-circle"></i>Berhasil membeli tiket!</div>');
+            redirect('user/profil','refresh');
         } else {
             $this->session->set_flashdata('gagal_pesan', 'Pesanan Gagal Dibuat');
             redirect('user/checkout','refresh');
         }
-    }
+      }
     
     public function hapusCart()
     {

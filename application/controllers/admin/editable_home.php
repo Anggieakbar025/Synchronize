@@ -10,8 +10,8 @@ class editable_home extends CI_Controller {
         $data['faq'] = $this->home_model->getFaq();
         $data['konten'] = $this->home_model->getKonten();
         $data['jadwal'] = $this->home_model->getJadwal();
-        $data['detail_jadwal'] = $this->home_model->getDetailJadwal();
         $data['tiket'] = $this->home_model->getTiket();
+        $data['kelas'] = $this->home_model->getKelasTiket();
         $data['guest'] = $this->gs_model->getGuest();
         $this->load->view('editable_template', $data);
     }
@@ -106,6 +106,7 @@ class editable_home extends CI_Controller {
         $this->form_validation->set_rules('venue', 'venue', 'trim|required');
         $this->form_validation->set_rules('location_venue', 'location_venue', 'trim|required');
         $this->form_validation->set_rules('tanggal', 'tanggal', 'trim|required');
+        $this->form_validation->set_rules('status', 'status', 'trim|required');
         
         
         if ($this->form_validation->run() == TRUE) {
@@ -145,19 +146,6 @@ class editable_home extends CI_Controller {
             redirect('admin/editable_home','refresh');
         }
          
-    }
-
-    public function tambahJadwal(Type $var = null)
-    {
-        $this->editable_model->addJadwal();
-        redirect('admin/editable_home','refresh');
-    }
-
-    public function hapusJadwal($id)
-    {
-        $this->db->where('id_jadwal', $id);
-        $this->db->delete('jadwal');
-        redirect('admin/editable_home','refresh');
     }
 
     public function tambahDetailJadwal($id)

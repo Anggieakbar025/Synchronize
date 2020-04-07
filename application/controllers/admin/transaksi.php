@@ -20,5 +20,13 @@ class transaksi extends CI_Controller {
         $data['transaksi']=$this->admin->get_transaksi();
         $data['konten']='admin/transaksi_masuk';
 		$this->load->view('template_admin',$data);
-	}
+    }
+    
+    public function update(){
+        $this->load->model('admin_model','admin');
+        $id = $this->input->post('id');
+        $status = $this->input->post('status');
+        $this->admin->update_transaksi($id,$status);
+        redirect('admin/transaksi');
+    }
 }

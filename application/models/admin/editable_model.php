@@ -12,11 +12,11 @@ class editable_model extends CI_Model {
         return $this->db->get();
     }
     
-    public function getDetailJadwal($id)
+    public function getJadwal($id)
     {
         $this->db->select('*');
-        $this->db->from('detail_jadwal');
-        $this->db->where('id_detail_jadwal', $id);
+        $this->db->from('jadwal');
+        $this->db->where('id_jadwal', $id);
         return $this->db->get();
         
     }
@@ -48,7 +48,7 @@ class editable_model extends CI_Model {
             'venue' => $this->input->post('venue'),
             'location_venue' => $this->input->post('location_venue'),
             'tanggal' => $this->input->post('tanggal'),
-            'status_event' => 1
+            'status_event' => $this->input->post('status')
         );
         $this->db->where('id_event', $id);
         $this->db->update('event', $data);
@@ -73,7 +73,7 @@ class editable_model extends CI_Model {
         }
 
         $data = array(
-            'status_event' => 'selesai'
+            'status_event' => $this->input->post('past_event')
         );
         $this->db->where('id_event', $id);
         $this->db->update('event', $data);
@@ -100,21 +100,6 @@ class editable_model extends CI_Model {
         $this->db->update('faq', $data);
     }
 
-    public function addJadwal()
-    {
-        $hari = $this->db->query('SELECT MAX(hari) + 1 as new FROM jadwal')->result_array();
-
-        foreach ($hari as $h) {
-            $day = $h['new'];
-        }
-
-        $data = array(
-            'hari' => $day
-        );
-        $this->db->insert('jadwal', $data);
-        
-    }
-
     public function tambah_detail_jadwal($gambar, $id)
     {
         $data = array(
@@ -122,9 +107,9 @@ class editable_model extends CI_Model {
             'kegiatan' => $this->input->post('kegiatan'),
             'deskripsi_kegiatan' => $this->input->post('deskripsi_kegiatan'),
             'gambar' => $gambar['file_name'],
-            'id_jadwal' => $id
+            'id_event' => $id
         );
-        $this->db->insert('detail_jadwal', $data);
+        $this->db->insert('jadwal', $data);
     }
 
     public function tambah_jadwal_noImage($id)

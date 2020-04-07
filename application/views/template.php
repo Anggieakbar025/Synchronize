@@ -1,9 +1,8 @@
 <?php 
 	foreach ($konten as $main ) {
 		$about = $main['about_event'];
-		$venue = $main['venue'];
-		$location = $main['location_venue'];
 		$tanggal = $main['tanggal'];
+		$location_venue = $main['location_venue'];
 	}
 
 ?>
@@ -138,7 +137,7 @@
 					<div class="col-lg-3 pl-4">
 						<h3>When</h3>
 						<p>
-						<?php
+							<?php
 							$date = date_create($tanggal);
 							$tampil = date_format($date, "D, d M Y");
 							echo $tampil.'<br>'.$venue;
@@ -152,111 +151,53 @@
 		<!--==========================
       Line Up Section
   	  ============================-->
-		<section id="lineup" class="wow fadeInUp">
-			<div class="container mt-5">
+		<section id="lineup" class="section-with-bg">
+			<div class="container wow fadeInUp mt-5">
 				<div class="section-header">
 					<h2>line up</h2>
 					<p>Here are some of our line up</p>
 				</div>
 
-				<div class="row">
-					<?php foreach ($guest as $gs) : ?>
-					<div class="col-lg-4 col-md-6">
-						<div class="guest">
-							<a href="<?= base_url(); ?>user/lineup/index/<?= $gs['id_guest'] ?>">
-								<img src="<?= base_url(); ?>assets/images/gs/<?= $gs['gambar'] ?>" alt="Speaker 1"
-									class="img-fluid-guest">
-							</a>
-							<div class="details">
-								<h3><a
-										href="<?= base_url('home/lineup'); ?>/<?= $gs['id_guest'] ?>"><?= $gs['nama_guest']; ?></a>
-								</h3>
-								<p><?= $gs['genre']; ?></p>
-								<div class="social">
-									<a href=""><i class="fa fa-twitter"></i></a>
-									<a href=""><i class="fa fa-facebook"></i></a>
-									<a href=""><i class="fa fa-google-plus"></i></a>
-									<a href=""><i class="fa fa-linkedin"></i></a>
-								</div>
-							</div>
-						</div>
-					</div>
-					<?php endforeach; ?>
-				</div>
-			</div>
-
-		</section>
-
-		<!--==========================
-      Schedule Section
-    ============================-->
-
-		<section id="schedule" class="section-with-bg">
-			<div class="container wow fadeInUp mt-5">
-				<div class="section-header">
-					<h2>Event Schedule</h2>
-					<p>Here is our event schedule</p>
-				</div>
-
 				<ul class="nav nav-tabs" role="tablist">
-					<?php foreach ($jadwal as $j) : ?>
+					<?php foreach ($konten as $k) : ?>
 					<li class="nav-item">
-						<a class="nav-link" href="#day-<?= $j['id_jadwal'] ?>" role="tab" data-toggle="tab"
-							aria-selected="true">Day <?= $j['hari'] ?></a>
+						<a class="nav-link" href="#event-<?= $k['id_event']; ?>" role="tab" data-toggle="tab"
+							aria-selected="true"><?= $k['nama_event']; ?></a>
 					</li>
 					<?php endforeach; ?>
 				</ul>
 
 				<div class="tab-content row justify-content-center">
-					<?php foreach ($jadwal as $j ) : ?>
+					<?php foreach ($konten as $k ) : ?>
 					<!-- Schdule Day 1 -->
-					<div role="tabpanel" class="col-lg-9 tab-pane fade" id="day-<?= $j['id_jadwal'] ?>">
+					<div role="tabpanel" class="col-lg-12 tab-pane fade" id="event-<?= $k['id_event'] ?>">
 
-						<?php foreach ($detail_jadwal as $dj ) {
-						if ($j['id_jadwal'] == $dj['id_jadwal']) {
-							if ($dj['gambar'] == null) { ?>
-						<div class="row schedule-item">
-							<div class="col-md-2 mt-3"><time><?= $dj['waktu']; ?></time></div>
-							<div class="col-md-10">
-								<h4><?= $dj['kegiatan']; ?></h4>
-								<p><?= $dj['deskripsi_kegiatan']; ?></p>
-							</div>
-						</div>
-						<?php } else { ?>
-						<div class="row schedule-item">
-							<div class="col-md-2 mt-3"><time><?= $dj['waktu']; ?></time></div>
-							<div class="col-md-10">
-								<div class="guest">
-									<img class="" src="<?= base_url(); ?>assets/img/schedule/<?= $dj['gambar'] ?>">
+						<?php foreach ($guest as $gs ) {
+						if ($k['id_event'] == $gs['id_event']) { ?>
+						<div class="col-lg-4 col-md-6">
+							<div class="guest">
+								<a href="<?= base_url(); ?>user/lineup/index/<?= $gs['id_guest'] ?>">
+									<img src="<?= base_url(); ?>assets/images/gs/<?= $gs['gambar'] ?>" alt="Speaker 1"
+										class="img-fluid-guest">
+								</a>
+								<div class="details">
+									<h3><a
+											href="<?= base_url('home/lineup'); ?>/<?= $gs['id_guest'] ?>"><?= $gs['nama_guest']; ?></a>
+									</h3>
+									<p><?= $gs['genre']; ?></p>
+									<div class="social">
+										<a href=""><i class="fa fa-twitter"></i></a>
+										<a href=""><i class="fa fa-facebook"></i></a>
+										<a href=""><i class="fa fa-google-plus"></i></a>
+										<a href=""><i class="fa fa-linkedin"></i></a>
+									</div>
 								</div>
-								<h4><?= $dj['kegiatan']; ?></h4>
-								<p><?= $dj['deskripsi_kegiatan']; ?></p>
 							</div>
 						</div>
-						<?php } } }	 ?>
+						<?php } } ?>
 					</div>
-
 					<!-- End Schdule Day 1 -->
 					<?php endforeach; ?>
-				</div>
-			</div>
-		</section>
-
-	<!--==========================
-    Countdown Section
-  	============================-->
-	  <section id="about">
-			<div class="container wow fadeInUp mt-3 mb-3">
-				<div class="row">
-					<div class="col-md-12">
-						<h2 class="text-center">Countdown to <span>Event</span></h2>
-						<div class="countdown">
-							<div id="hari"></div>
-							<div id="jam"></div>
-							<div id="menit"></div>
-							<div id="detik"></div>
-						</div>
-					</div>
 				</div>
 			</div>
 		</section>
@@ -274,17 +215,21 @@
 				</div>
 
 				<div class="row no-gutters">
-					<div class="col-lg-6 venue-map">
-						<iframe src="<?= $location; ?>" frameborder="0" style="border:0" allowfullscreen></iframe>
-					</div>
-
 					<div class="col-lg-6 venue-info">
 						<div class="row justify-content-center">
-							<div class="col-11 col-lg-8">
-								<h3><?= $venue; ?></h3>
-								<p>Gedung Graha Cakrawala Universitas Negeri Malang</p>
+							<?php foreach ($konten as $k) : ?>
+							<div class="col-10 col-lg-8 mb-3">
+								<h4 style="margin:0;"><?= $k['nama_event'] ?></h4>
+								<small class="text-light"><?= $k['venue'] ?></small>
 							</div>
+							<div class="col-2 ml-1 mt-2">
+								<button type="button" onClick="setMaps(<?= $k['id_event'] ?>)" class="btn btn-outline-danger"><i class="fa fa-share"></i></button>
+							</div>
+							<?php endforeach; ?>
 						</div>
+					</div>
+					<div class="col-lg-6 venue-map">
+						<iframe id="maps" src="" frameborder="0" style="border:0;" allowfullscreen></iframe>
 					</div>
 				</div>
 
@@ -292,10 +237,84 @@
 
 		</section>
 
+
+		<!--==========================
+      Schedule Section
+    ============================-->
+
+		<section id="schedule" class="section-with-bg">
+			<div class="container wow fadeInUp mt-5">
+				<div class="section-header">
+					<h2>Event Schedule</h2>
+					<p>Here is our event schedule</p>
+				</div>
+
+				<ul class="nav nav-tabs" role="tablist">
+					<?php foreach ($konten as $k) : ?>
+					<li class="nav-item">
+						<a class="nav-link" href="#day-<?= $k['id_event'] ?>" role="tab" data-toggle="tab"
+							aria-selected="true"><?= $k['nama_event'] ?></a>
+					</li>
+					<?php endforeach; ?>
+				</ul>
+
+				<div class="tab-content row justify-content-center">
+					<?php foreach ($konten as $k ) : ?>
+					<!-- Schdule Day 1 -->
+					<div role="tabpanel" class="col-lg-9 tab-pane fade" id="day-<?= $k['id_event'] ?>">
+
+						<?php foreach ($jadwal as $j ) {
+							if ($j['id_event'] == $k['id_event']) {
+							if ($j['gambar'] == null) { ?>
+						<div class="row schedule-item">
+							<div class="col-md-2">
+								<time>
+									<?php
+										$time = date_create($j['waktu']);
+										$waktu = date_format($time, 'd M Y H:s');
+										echo $waktu;
+									?>
+								</time>
+							</div>
+							<div class="col-md-10">
+								<h4><?= $j['kegiatan']; ?></h4>
+								<p><?= $j['deskripsi_kegiatan']; ?></p>
+							</div>
+						</div>
+						<?php } else { ?>
+						<div class="row schedule-item">
+							<div class="col-md-2 mt-3">
+								<time>
+									<?php
+										$time = date_create($j['waktu']);
+										$waktu = date_format($time, 'd M Y H:s');
+										echo $waktu;
+									?>
+								</time>
+							</div>
+							<div class="col-md-10">
+								<div class="guest">
+									<img class="" src="<?= base_url(); ?>assets/img/schedule/<?= $j['gambar'] ?>">
+								</div>
+								<h4><?= $j['kegiatan']; ?></h4>
+								<p><?= $j['deskripsi_kegiatan']; ?></p>
+							</div>
+						</div>
+						<?php } } }	 ?>
+					</div>
+
+					<!-- End Schdule Day 1 -->
+					<?php endforeach; ?>
+				</div>
+			</div>
+		</section>
+
+
+
 		<!--==========================
       Buy Ticket Section
     ============================-->
-		<section id="buy-tickets" class="section-with-bg wow fadeInUp">
+		<section id="buy-tickets" class="wow fadeInUp">
 			<div class="container mt-5">
 
 				<div class="section-header">
@@ -304,39 +323,60 @@
 				</div>
 
 				<div class="row">
-					<?php foreach ($tiket as $tkt ) :
-					if ($tkt < 2) { ?>
-					<div class="col-lg-12 mt-3">
-						<div class="tiket">
-							<b><?= $tkt['kelas']; ?></b> <br>
-							<?= $tkt['harga']; ?> <br>
-							<button type="button" class="btn btn-outline-light mt-2" data-toggle="modal"
-								data-target="#buy-ticket-modal<?= $tkt['id_tiket'] ?>">
-								Beli
-							</button>
+					
+					<?php foreach ($konten as $k ) :
+					if ($k < 2) { ?>
+					<div class="tiket col-lg-12">
+						<div class="mb-1 mt-5">
+							<div class="row tiket-event-name mt-5" style="display: block;">
+								<h1><?= $k['nama_event']; ?></h1>
+							</div>
+							<div class="row mt-3 tiket-kelas">
+								<ul>
+									<?php foreach ($kelas as $kel) { 
+									if ($k['id_event'] == $kel['id_event']) { ?>
+									<li><?= $kel['kelas']; ?></li>
+									<?php }} ?>
+								</ul>
+							</div>
+							<div class="row tiket-button mt-3">
+								<button type="button" class="btn btn-block btn-outline-primary" data-toggle="modal"
+									data-target="#buy-ticket-modal<?= $k['id_event'] ?>">
+									more
+								</button>
+							</div>
 						</div>
 					</div>
 					<?php } else { ?>
-					<div class="col-lg-6">
-						<div class="tiket mb-1">
-							<b><?= $tkt['kelas']; ?></b>
-							<br>
-							<?= $tkt['harga']; ?> <br>
-							<br>
-							<button type="button" class="btn btn-outline-primary" data-toggle="modal"
-								data-target="#buy-ticket-modal<?= $tkt['id_tiket'] ?>">
-								Beli
-							</button>
+					<div class="tiket col-lg-6">
+						<div class="mb-1">
+							<div class="row tiket-event-name" style="display: block;">
+								<p><?= $k['nama_event']; ?></p>
+							</div>
+							<div class="row mt-3 tiket-kelas">
+								<ul>
+									<?php foreach ($kelas as $kel) { 
+									if ($k['id_event'] == $kel['id_event']) { ?>
+									<li><?= $kel['kelas']; ?></li>
+									<?php }} ?>
+								</ul>
+							</div>
+							<div class="row tiket-button mt-3">
+								<button type="button" class="btn btn-block btn-outline-primary" data-toggle="modal"
+									data-target="#buy-ticket-modal<?= $k['id_event'] ?>">
+									more
+								</button>
+							</div>
 						</div>
 					</div>
 					<?php } endforeach; ?>
 				</div>
 
 			</div>
-			<?php foreach ($tiket as $tkt) : ?>
+			<?php foreach ($konten as $k) : ?>
 
 			<!-- Modal Order Form -->
-			<div id="buy-ticket-modal<?= $tkt['id_tiket'] ?>" class="modal fade">
+			<div id="buy-ticket-modal<?= $k['id_event'] ?>" class="modal fade">
 				<div class="modal-dialog " role="document">
 					<div class="modal-content">
 						<div class="modal-header">
@@ -346,7 +386,21 @@
 							</button>
 						</div>
 						<div class="modal-body">
-							<form method="POST" action="<?= base_url('home/add_item/'.$tkt['id_tiket']) ?>">
+							<form method="POST" action="<?= base_url('home/add_item') ?>">
+								<div class="mb-3">
+									<select name="kelas" id="kelas" class="form-control">
+										<option value="">Pilih Tiket</option>
+										<?php foreach ($tiket as $tkt) { 
+											if ($tkt['id_event'] == $k['id_event']) { ?>
+										<option value="<?= $tkt['id_tiket'] ?>"><?= $tkt['kelas'] ?></option>
+										<?php }} ?>
+									</select>
+								</div>
+								<div class="mb-3">
+									<select name="id_akses" id="akses" class="form-control">
+										<option value="">Pilih Akses</option>
+									</select>
+								</div>
 								<div>
 									<small class="mb-2 text-danger">*Maksimal pembelian 5 tiket</small>
 									<input class="form-control mb-3" placeholder="Masukan Jumlah Tiket" type="number"
@@ -367,7 +421,7 @@
 		<!--==========================
       Gallery Section
     ============================-->
-		<section id="history" class="wow fadeInUp">
+		<section id="history" class="wow fadeInUp section-with-bg">
 
 			<div class="container mt-5">
 				<div class="section-header">
@@ -378,10 +432,10 @@
 
 			<div class="owl-carousel gallery-carousel">
 				<?php foreach ($galeri as $a ) : ?>
-				<a href="" class="venobox" data-gall="gallery-carousel"><img
-						height="200" width="250" src="<?= base_url(); ?>assets/images/galeri/<?= $a['gambar'] ?>"></a>
-				
-						<?php endforeach; ?>
+				<a href="" class="venobox" data-gall="gallery-carousel"><img height="200" width="250"
+						src="<?= base_url(); ?>assets/images/galeri/<?= $a['gambar'] ?>"></a>
+
+				<?php endforeach; ?>
 			</div>
 			<div class="detail-content mt-3">
 				<a href="<?= base_url('user/gallery') ?>" class="detail">See More</a>
@@ -392,7 +446,7 @@
 		<!--==========================
       Sponsors Section
     ============================-->
-		<section id="supporters" class="section-with-bg wow fadeInUp">
+		<section id="supporters" class=" wow fadeInUp">
 			<div class="container mt-5">
 				<div class="section-header">
 					<h2>Sponsors</h2>
@@ -414,7 +468,7 @@
 		<!--==========================
       F.A.Q Section
     ============================-->
-		<section id="faq" class="wow fadeInUp">
+		<section id="faq" class="wow fadeInUp section-with-bg">
 
 			<div class="container mt-5">
 
@@ -546,16 +600,18 @@
 
 			var kondisi = parseInt(h) == 0 && parseInt(j) == 0 && parseInt(m) == 0 && parseInt(d) == 0
 
-			if(kondisi){
+			if (kondisi) {
 				clearInterval(start);
 			}
 		}
 
-		var start = setInterval(function(){
+		var start = setInterval(function () {
 			countdown();
 		}, 1000);
 
 	</script>
+	
+
 
 	<!-- JavaScript Libraries -->
 	<script src="<?= base_url(); ?>assets/lib/jquery/jquery.min.js"></script>
@@ -573,6 +629,51 @@
 
 	<!-- Template Main Javascript File -->
 	<script src="<?= base_url(); ?>assets/js/main.js"></script>
+
+	<script>
+		$(document).ready(function(){
+			$('#kelas').change(function(){
+				var id = $(this).val();
+				$.ajax({
+					url: '<?= base_url(); ?>home/getAkses',
+					method: 'POST',
+					dataType: 'JSON',
+					data: {
+						id:id
+					},
+					success: function(array){
+						var html = '';
+						for (let i = 0; i < array.length; i++) {
+							html += '<option value="' + array[i].id_akses + '">' + array[i].akses + '</option>'
+						}
+						$('#akses').html(html);
+					}
+				})
+			})
+		})
+	</script>
+
+	<script>
+		function setMaps(id) {
+			var id = id;
+			$.ajax({
+				url: '<?= base_url(); ?>home/getMaps',
+				method: 'POST',
+				dataType: 'JSON',
+				data: {
+					id:id
+				},
+				success: function(array){
+					var html = '';
+					for (let i = 0; i < array.length; i++) {
+						html += array[i].location_venue
+					}
+					$('#maps').attr('src', html);
+				}
+			})
+		}
+	</script>
+	
 
 </body>
 

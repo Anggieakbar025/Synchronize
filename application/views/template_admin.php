@@ -15,7 +15,8 @@
     <link rel="stylesheet" href="<?= base_url('assets/'); ?>plugins/chartist-plugin-tooltips/css/chartist-plugin-tooltip.css">
 
     <link href="https://cdn.jsdelivr.net/npm/vanilla-datatables@latest/dist/vanilla-dataTables.min.css" rel="stylesheet"
-		type="text/css">
+        type="text/css">
+    <link href="<?= base_url('assets/'); ?>plugins/tables/css/datatable/dataTables.bootstrap4.min.css" rel="stylesheet">
 
     <!-- Custom Stylesheet -->
     <?php if ($konten == 'admin/scan') { ?>
@@ -331,6 +332,9 @@
 
 
     <script src="<?= base_url('assets/'); ?>js/dashboard/dashboard-1.js"></script>
+    <script src="<?= base_url('assets/'); ?>plugins/tables/js/jquery.dataTables.min.js"></script>
+    <script src="<?= base_url('assets/'); ?>plugins/tables/js/datatable/dataTables.bootstrap4.min.js"></script>
+    <script src="<?= base_url('assets/'); ?>plugins/tables/js/datatable-init/datatable-basic.min.js"></script>
 
 </body>
 

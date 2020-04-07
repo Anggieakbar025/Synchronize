@@ -52,4 +52,9 @@ class admin_model extends CI_Model {
         $this->db->from('user');
         return $this->db->get()->result_array();
     }
+
+    public function update_transaksi($id,$status){
+        $query= $this->db->query("UPDATE transaksi SET status = '$status' WHERE id_transaksi = '$id'");
+        return $query;
+    }
 }

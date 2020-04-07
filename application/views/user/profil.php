@@ -64,7 +64,8 @@
 						<tr>
 							<th>Name</th>
 							<th>Qty</th>
-							<th> Date</th>
+							<th>Total</th>
+							<th>Date</th>
 							<th>Status</th>
 							<th>Ticket</th>
 						</tr>
@@ -76,6 +77,7 @@
 						<tr>
 							<td><?= $_SESSION['nama_user']; ?></td>
 							<td><?= $trs['qty']; ?></td>
+							<td>Rp. <?= number_format($trs['total'] ,0,',',',')?></td>
 							<td><?= date('d M Y', $trs['tanggal']) ?></td>
 							<?php if($trs['status']=='selesai'){  ?>
 							<td><b class="btn btn-sm btn-primary"><?= $trs['status']; ?></b></td>

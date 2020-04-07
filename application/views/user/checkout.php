@@ -67,7 +67,8 @@
 							</ul>
 							<?php foreach ($this->cart->contents() as $items):?>
 							<ul class="order_product">
-								<li><?= $items['name'];?> <br>
+								<li style="margin: 0; border-bottom: 3px dotted grey;">
+									<?= $items['name']. ' ( ' . $items['akses'].' ) '?>  <br>
 									<?php
 									$qty = 0;
 									if ($items['qty'] > 1) { ?>
@@ -76,24 +77,22 @@
 									<?php } else { ?>
 									<a class="operation-qty-min" href="#">-</a>
 									<?php } ?>
-									<?php echo $items['qty']?><span>Rp.<?php echo number_format($items['price'],0,',','.')?></span>
+									<?php echo $items['qty']?><span>Rp. <?php echo number_format($items['price'],0,',','.')?></span>
 									<a class="operation-qty-plus"
 										href="<?= base_url(); ?>home/plusQty/<?= $items['id'] ?>">+</a>
 								</li>
-
 							</ul>
 							<?php endforeach;?>
 							<ul class="shipping__method">
 								<a href="<?= base_url('home/hapusCart') ?>" type="button">Hapus</a>
 								<a href="<?= base_url('home/home') ?>" type="button">Home</a>
 								<li>Cart Subtotal
-									<span>Rp.<?php echo number_format($this->cart->total(),0,',','.')?></span></li>
+									<span>Rp. <?php echo number_format($this->cart->total(),0,',','.')?></span></li>
 								</li>
 							</ul>
 
 							<ul class="total__amount">
-								<li>ORDER TOTAL <span>Rp.
-										<?php echo number_format($this->cart->total() ,0,',','.')?></span>
+								<li>ORDER TOTAL <span>Rp. <?php echo number_format($this->cart->total() ,0,',','.')?></span>
 								</li>
 							</ul>
 						</div>

@@ -15,11 +15,40 @@ class home_model extends CI_Model {
 
     public function getTiket()
     {
-        return $this->db->get('tiket')->result_array();
+        $this->db->select('*');
+        $this->db->from('event e');
+        $this->db->join('tiket t', 't.id_event = e.id_event');
+        return $this->db->get()->result_array();
+    }
+
+    public function getAkses($id)
+    {
+        $this->db->from('akses');
+        $this->db->where('id_tiket', $id);
+        return $this->db->get()->result_array();
+    }
+
+    public function getMaps($id)
+    {
+        $this->db->from('event');
+        $this->db->where('id_event', $id);
+        return $this->db->get()->result_array();
+    }
+
+    public function getKelasTiket()
+    {
+        $this->db->select('*');
+        $this->db->from('tiket');
+        return $this->db->get()->result_array();
     }
 
     public function getKonten()
     {
+        $event = $this->db->query('SELECT MAX(id_event) as event_now FROM event')->result_array();
+        foreach ($event as $e ) {
+            $id = $e['event_now'];
+        }
+        
         $this->db->select('*');
         $this->db->from('event');
         $this->db->where('status_event', 'aktif');
@@ -30,11 +59,6 @@ class home_model extends CI_Model {
     {
         return $this->db->get('sponsor')->result_array();
     }
-
-    // public function getHistory()
-    // {
-    //     return $this->db->query('SELECT *, g.nama_guest, e.id_event FROM history h JOIN event e ON h.id_event = e.id_event JOIN guest g ON e.id_event = g.id_event')->result_array();
-    // }
 
     public function getHistoryPesan()
     {
@@ -50,61 +74,60 @@ class home_model extends CI_Model {
         return $this->db->get('faq')->result_array();
     }
 
-    public function getDetailJadwal()
+    public function getJadwal()
     {
         $this->db->select('*');
-        $this->db->from('detail_jadwal j');
-        $this->db->join('jadwal dj', 'j.id_jadwal = dj.id_jadwal');
+        $this->db->from('jadwal j');
+        $this->db->join('event e', 'j.id_event = e.id_event');
         $this->db->order_by('waktu', 'asc');
         
         return $this->db->get()->result_array();
     }
 
-    public function getJadwal()
-    {
-        return $this->db->get('jadwal')->result_array();
-        
-    }
-
     public function getTiketCart($id)
     {
-        $result = $this->db->where('id_tiket', $id)
-                           ->limit(1)
-                           ->get('tiket');
-        if ($result->num_rows() > 0) {
-            return $result->row();
-        } else {
-            return array();
-        }
+        $this->db->select('*');
+        $this->db->from('akses a');
+        $this->db->join('tiket t', 'a.id_tiket = t.id_tiket');
+        $this->db->join('event e', 't.id_event = e.id_event');
+        $this->db->where('id_akses', $id);
+        $this->db->limit(1);
+        return $this->db->get()->row();
+
+        // if ($result->num_rows() > 0) {
+        //     return $result->row();
+        // } else {
+        //     return array();
+        // }
     }
 
     public function pesan()
     {
 
         foreach ($this->cart->contents() as $items) {
-            $qty = $items['qty'];
-            $id_tiket  = $items['id'];
+            $qty = $this->cart->total_items();
+            $id_akses  = $items['id'];
         }
 
         $jumlah = $qty;
 
         $data = array(
             'id_user'           => $this->input->post('id_user'),
-            'qty'               => $qty,
             'tanggal'           => time(),
+            'qty'               => $this->cart->total_items(),
+            'total'             => $this->cart->total(),
             'status'            => 1
         );
         $this->db->insert('transaksi', $data);
         $id_transaksi = $this->db->insert_id();
         
-        if ($qty != null) {
-            for ($qty = 1; $qty <= $jumlah; $qty++) {
-                $data = array(
-                    'id_transaksi'      => $id_transaksi, 
-                    'id_tiket'          => $id_tiket
-                );
-                $this->db->insert('detail_transaksi', $data);
-            }
+        foreach ($this->cart->contents() as $items) {
+            $data = array(
+                'id_transaksi'      => $id_transaksi, 
+                'id_akses'          => $items['id'],
+                'qty'               => $items['qty']
+            );
+            $this->db->insert('detail_transaksi', $data);
         }
     }
 

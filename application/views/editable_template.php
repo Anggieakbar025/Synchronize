@@ -98,101 +98,187 @@
 			</p>
 			<a href="#" class="venobox play-btn mb-4" data-vbtype="video" data-autoplay="true"></a>
 			<a href="#buy-tickets" class="about-btn scrollto">Buy Ticket</a>
-			<div class="row">
-				<button type="button" class="btn btn-outline-danger mt-2 mr-3" data-toggle="modal"
-					data-target="#addMain">
-					New Event
-				</button>
-				<button type="button" class="btn btn-outline-danger mt-2" data-toggle="modal" data-target="#editMain">
-					Edit Event
-				</button>
-			</div>
+
 		</div>
 
-		<!-- Modal Edit Konten -->
-		<div id="addMain" class="modal fade">
-			<div class="modal-dialog " role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h4 style="color: navy !important;" class="modal-title">Add New Event</h4>
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-					</div>
-					<div class="modal-body">
-						<form method="POST" action="<?= base_url('admin/editable_home/addNewEvent')?>"
-							enctype="multipart/form-data">
-							<div>
-								<input type="text" class="form-control mb-3" placeholder="Episode" name="nama_event" required>
-							</div>
-							<div>
-								<textarea class="form-control mb-3" placeholder="About the Event" name="about_event"
-									rows="3" required></textarea>
-							</div>
-							<div>
-								<small class="text-danger">*Isi dengan venue event</small>
-								<input type="text" class="form-control mb-3" placeholder="Venue" name="venue"  required>
-							</div>
-							<div>
-								<small class="text-danger">*Isi dengan iFrame dari google maps untuk maps venue</small>
-								<textarea class="form-control mb-3" placeholder="Maps Venue" name="location_venue"
-									rows="3" required></textarea>
-							</div>
-							<div>
-								<label class="text-dark">Waktu Event</label>
-								<input class="form-control mb-3" type="date" name="tanggal">
-							</div>
-							<div class="text-center">
-								<button type="submit" class="btn btn-success btn-block">Save</button>
-							</div>
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div id="editMain" class="modal fade">
-			<div class="modal-dialog " role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h4 style="color: navy !important;" class="modal-title">Edit Event</h4>
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-					</div>
-					<div class="modal-body">
-						<form method="POST" action="<?= base_url('admin/editable_home/editEvent/'. $id_event)?>"
-							enctype="multipart/form-data">
-							<div>
-								<input type="text" class="form-control mb-3" value="<?= $nama_event; ?>" name="nama_event" required>
-							</div>
-							<div>
-								<textarea class="form-control mb-3" placeholder="About the Event" name="about_event"
-									rows="3" required><?= $about; ?></textarea>
-							</div>
-							<div>
-								<small class="text-danger">*Isi dengan venue event</small>
-								<input type="text" class="form-control mb-3" value="<?= $venue ?>" name="venue" required>
-							</div>
-							<div>
-								<small class="text-danger">*Isi dengan iFrame dari google maps untuk maps venue</small>
-								<textarea class="form-control mb-3" value="Maps of Venue" name="location_venue" rows="3" required><?= $location; ?></textarea>
-							</div>
-							<div>
-								<label class="text-dark">Waktu Event</label>
-								<input type="date" class="form-control mb-3" value="<?= $tanggal; ?>" name="tanggal">
-							</div>
-							<div class="text-center">
-								<button type="submit" class="btn btn-success btn-block">Save</button>
-							</div>
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!-- End Modal -->
+
 	</section>
 
 	<main id="main">
+
+		<section id="schedule" class="section-with-bg">
+			<div class="container wow fadeInUp">
+				<div class="section-header">
+					<h2>Event List</h2>
+				</div>
+				<div class="row justify-content-center">
+					<div class="col-lg-12">
+						<table class="table" style="margin-bottom: 0 !important;">
+							<thead>
+								<tr>
+									<th>Episode</th>
+									<th style="width: 35%;">Desc</th>
+									<th style="width: 20%;">Venue</th>
+									<th>Tanggal</th>
+									<th>Status</th>
+									<th>Action</th>
+								</tr>
+							</thead>
+							<tbody>
+								<?php foreach ($konten as $k ) : ?>
+								<tr>
+									<td><?= $k['nama_event']; ?></td>
+									<td><?= $k['about_event']; ?></td>
+									<td><?= $k['venue']; ?></td>
+									<td>
+										<?php
+											$date = date_create($k['tanggal']);
+											$tanggal = date_format($date, 'd M Y');
+											echo $tanggal;
+										?>
+									</td>
+									<td><?= $k['status_event']; ?></td>
+									<td>
+										<a data-toggle="modal" type="button"
+											data-target="#editEvent<?= $k['id_event']; ?>">
+											<i class="fa fa-pencil"></i>
+										</a>
+										<a href="<?= base_url(); ?>admin/editable_home/hapusEvent/<?= $k['id_event'] ?>"
+											onclick="return confirm('Anda yakin ingin menghapus data?')">
+											<i class="fa fa-trash"></i>
+										</a>
+									</td>
+								</tr>
+								<?php endforeach; ?>
+							</tbody>
+						</table>
+						<div class="row mt-3">
+							<button type="button" class="btn btn-block btn-outline-danger mt-2 mr-3" data-toggle="modal"
+								data-target="#addMain">
+								New Event
+							</button>
+						</div>
+					</div>
+				</div>
+				<?php foreach ($konten as $k) : ?>
+				<div id="editEvent<?= $k['id_event'] ?>" class="modal fade">
+					<div class="modal-dialog " role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h4 style="color: navy !important;" class="modal-title">Edit Event</h4>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div class="modal-body">
+								<form method="POST"
+									action="<?= base_url('admin/editable_home/editEvent/'.$k['id_event'])?>"
+									enctype="multipart/form-data">
+									<div>
+										<input type="text" class="form-control mb-3" value="<?= $k['nama_event'] ?>"
+											name="nama_event" required>
+									</div>
+									<div>
+										<textarea class="form-control mb-3" placeholder="About the Event"
+											name="about_event" rows="3" required><?= $k['about_event'] ?></textarea>
+									</div>
+									<div>
+										<small class="text-danger">*Isi dengan venue event</small>
+										<input type="text" class="form-control mb-3" value="<?= $k['venue']?>"
+											name="venue" required>
+									</div>
+									<div>
+										<small class="text-danger">*Isi dengan iFrame dari google maps untuk maps
+											venue</small>
+										<textarea class="form-control mb-3" value="Maps of Venue" name="location_venue"
+											rows="3" required><?= $k['location_venue'] ?></textarea>
+									</div>
+									<div>
+										<label class="text-dark">Waktu Event</label>
+										<input type="date" class="form-control mb-3" value="<?= $k['tanggal'] ?>"
+											name="tanggal">
+									</div>
+									<div class="mb-3">
+										<label class="text-dark" for="">Status</label><br>
+										<select class="form-control" name="status">
+											<option value="-">Pilih Status</option>
+											<option value="aktif"
+												<?php if($k['status_event'] = 'aktif'){echo 'checked';} ?>>aktif
+											</option>
+											<option value="selesai"
+												<?php if($k['status_event'] = 'selesai'){echo 'checked';} ?>>selesai
+											</option>
+										</select>
+									</div>
+									<div class="text-center">
+										<button type="submit" class="btn btn-success btn-block">Save</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+				<?php endforeach; ?>
+
+				<!-- Modal Edit Konten -->
+				<div id="addMain" class="modal fade">
+					<div class="modal-dialog " role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h4 style="color: navy !important;" class="modal-title">Add New Event</h4>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div class="modal-body">
+								<form method="POST" action="<?= base_url('admin/editable_home/addNewEvent')?>"
+									enctype="multipart/form-data">
+									<div>
+										<input type="text" class="form-control mb-3" placeholder="Episode"
+											name="nama_event" required>
+									</div>
+									<div>
+										<textarea class="form-control mb-3" placeholder="About the Event"
+											name="about_event" rows="3" required></textarea>
+									</div>
+									<div>
+										<small class="text-danger">*Isi dengan venue event</small>
+										<input type="text" class="form-control mb-3" placeholder="Venue" name="venue"
+											required>
+									</div>
+									<div>
+										<small class="text-danger">*Isi dengan iFrame dari google maps untuk maps
+											venue</small>
+										<textarea class="form-control mb-3" placeholder="Maps Venue"
+											name="location_venue" rows="3" required></textarea>
+									</div>
+									<div>
+										<label class="text-dark">Waktu Event</label>
+										<input class="form-control mb-3" type="date" name="tanggal">
+									</div>
+									<div class="mb-3">
+										<label class="text-dark" for="">Status Past Event</label><br>
+										<small class="text-danger">*Ubah selesai apabila event sebelumnya sudah tidak
+											ditampilkan</small>
+										<select class="form-control" name="past_event">
+											<option value="-">Pilih Status</option>
+											<option value="aktif">aktif</option>
+											<option value="selesai">selesai</option>
+										</select>
+									</div>
+									<div class="text-center">
+										<button type="submit" class="btn btn-success btn-block">Save</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- End Modal -->
+			</div>
+		</section>
+
 		<!--==========================
 		About Section
 		============================-->
@@ -225,262 +311,58 @@
 		<!--==========================
 		Line Up Section
 		============================-->
-		<section id="lineup" class="wow fadeInUp">
-			<div class="container">
+		<section id="lineup" class="section-with-bg">
+			<div class="container wow fadeInUp mt-5">
 				<div class="section-header">
 					<h2>line up</h2>
 					<p>Here are some of our line up</p>
 				</div>
 
-				<div class="row">
-					<?php foreach ($guest as $gs) : ?>
-					<div class="col-lg-4 col-md-6">
-						<div class="guest">
-							<a href="<?= base_url(); ?>home/lineup/<?= $gs['id_guest'] ?>">
-								<img src="<?= base_url(); ?>assets/img/default.png" alt="Speaker 1"
-									class="img-fluid-guest">
-							</a>
-							<div class="details">
-								<h3><a href="<?= base_url('home/lineup'); ?>"><?= $gs['nama_guest']; ?></a></h3>
-								<p><?= $gs['genre']; ?></p>
-								<div class="social">
-									<a href=""><i class="fa fa-twitter"></i></a>
-									<a href=""><i class="fa fa-facebook"></i></a>
-									<a href=""><i class="fa fa-google-plus"></i></a>
-									<a href=""><i class="fa fa-linkedin"></i></a>
-								</div>
-							</div>
-						</div>
-					</div>
-					<?php endforeach; ?>
-				</div>
-			</div>
-		</section>
-
-		<!--==========================
-		Schedule Section
-		============================-->
-		<section id="schedule" class="section-with-bg">
-			<div class="container wow fadeInUp">
-				<div class="section-header">
-					<h2>Event Schedule</h2>
-					<p>Here is our event schedule</p>
-				</div>
-				<div class="row justify-content-center">
-					<div class="col-lg-5">
-						<table class="table text-center" style="margin-bottom: 0 !important;">
-							<thead>
-								<tr>
-									<th>Hari</th>
-									<th>Action</th>
-								</tr>
-							</thead>
-							<tbody>
-								<?php foreach ($jadwal as $j ) : ?>
-								<tr>
-									<td>Day <?= $j['hari']; ?></td>
-									<td>
-										<a href="<?= base_url(); ?>admin/editable_home/hapusJadwal/<?= $j['id_jadwal'] ?>"
-											onclick="return confirm('Anda yakin ingin menghapus data?')">
-											<i class="fa fa-trash"></i>
-										</a>
-									</td>
-								</tr>
-								<?php endforeach; ?>
-							</tbody>
-						</table>
-						<div class="row justify-content-center">
-							<div class="detail-content col-lg-12 mt-2">
-								<a href="<?= base_url(); ?>admin/editable_home/tambahJadwal"
-									class="btn btn-outline-danger" style="width: 100%;">
-									Tambah Hari
-								</a>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-lg-9">
-						<?php foreach ($jadwal as $j ) : ?>
-						<table class="table" style="margin-bottom: 0 !important;">
-							<h4 class="text-center mt-3 pt-3 mb-4" style="border-top:2px dotted grey;">Day
-								<?= $j['hari'] ?></h4>
-							<thead>
-								<tr>
-									<th>Waktu</th>
-									<th>Kegiatan</th>
-									<th>Deskripsi</th>
-									<th>Gambar</th>
-									<th>Action</th>
-								</tr>
-							</thead>
-							<tbody>
-								<?php foreach ($detail_jadwal as $dj ) {
-								if ($j['id_jadwal'] == $dj['id_jadwal']) { ?>
-								<tr>
-									<td><?= $dj['waktu'] ?></td>
-									<td><?= $dj['kegiatan'] ?></td>
-									<td><?= $dj['deskripsi_kegiatan'] ?></td>
-									<td>
-										<?php if ($dj['gambar']) { ?>
-										<img height="60" width="60" style="border-radius: 30px;"
-											src="<?= base_url(); ?>assets/img/schedule/<?= $dj['gambar'] ?>">
-										<?php } else { ?>
-										No Image
-										<?php } ?>
-									</td>
-									<td>
-										<a data-toggle="modal" type="button"
-											data-target="#editDetailJadwal<?= $dj['id_detail_jadwal']; ?>">
-											<i class="fa fa-pencil"></i>
-										</a>
-										<a href="<?= base_url(); ?>admin/editable_home/hapusDetailJadwal/<?= $dj['id_detail_jadwal'] ?>"
-											onclick="return confirm('Anda yakin ingin menghapus data?')">
-											<i class="fa fa-trash"></i>
-										</a>
-									</td>
-								</tr>
-								<?php }} ?>
-							</tbody>
-						</table>
-						<div class="row justify-content-center">
-							<div class="detail-content col-lg-12 mt-2">
-								<button class="btn btn-outline-danger float-right" type="button" data-toggle="modal"
-									data-target="#tambahDetailJadwal<?= $j['id_jadwal'] ?>">
-									<i class="fa fa-plus"></i>
-								</button>
-							</div>
-						</div>
-						<?php endforeach; ?>
-					</div>
-				</div>
-				<!-- Modal Edit -->
-				<?php foreach ($detail_jadwal as $dj) : ?>
-				<div id="editDetailJadwal<?= $dj['id_detail_jadwal']; ?>" class="modal fade">
-					<div class="modal-dialog " role="document">
-						<div class="modal-content">
-							<div class="modal-header">
-								<h4 style="color: navy !important;" class="modal-title">Edit Jadwal</h4>
-								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-									<span aria-hidden="true">&times;</span>
-								</button>
-							</div>
-							<div class="modal-body">
-								<form method="POST" action="<?= base_url();?>admin/editable_home/editDetailJadwal/<?= $dj ['id_detail_jadwal']; ?>" enctype="multipart/form-data">
-									<div class="form-group">
-										<input type="text" class="form-control" name="waktu"
-											value="<?= $dj['waktu']; ?>">
-									</div>
-									<div class="form-group">
-										<input type="text" class="form-control" name="kegiatan"
-											value="<?= $dj['kegiatan']; ?>">
-									</div>
-									<div class="form-group">
-										<textarea type="text" class="form-control"
-											name="deskripsi_kegiatan"><?= $dj['deskripsi_kegiatan']; ?></textarea>
-									</div>
-									<div class="form-group">
-										<label class="text-dark">Gambar</label>
-										<input type="file" name="fotopost" class="form-control-file">
-										<span class="text-danger mt-2">Before: <?= $dj['gambar']; ?></span>
-									</div>
-									<div class="text-center">
-										<button type="submit" class="btn btn-success btn-block">Save</button>
-									</div>
-								</form>
-							</div>
-						</div>
-					</div>
-				</div>
-				<?php endforeach; ?>
-				<!-- End Modal -->
-
-				<!-- Tambah Schedule -->
-				<?php foreach ($jadwal as $j) : ?>
-				<div id="tambahDetailJadwal<?= $j['id_jadwal'] ?>" class="modal fade">
-					<div class="modal-dialog " role="document">
-						<div class="modal-content">
-							<div class="modal-header">
-								<h4 style="color: navy !important;" class="modal-title">Tambah Day <?= $j['hari'] ?>
-								</h4>
-								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-									<span aria-hidden="true">&times;</span>
-								</button>
-							</div>
-							<div class="modal-body">
-								<form method="POST"
-									action="<?= base_url('admin/editable_home/tambahDetailJadwal/'. $j['id_jadwal'] )?>"
-									enctype="multipart/form-data">
-									<div class="form-group">
-										<input type="time" class="form-control" name="waktu" placeholder="Waktu">
-									</div>
-									<div class="form-group">
-										<input type="text" class="form-control" name="kegiatan" placeholder="Kegiatan">
-									</div>
-									<div class="form-group">
-										<textarea type="text" class="form-control" name="deskripsi_kegiatan"
-											placeholder="Deskripsi"></textarea>
-									</div>
-									<div class="form-group">
-										<label class="text-dark">Gambar</label>
-										<input type="file" name="fotopost" class="form-control-file mb-3">
-									</div>
-									<div class="text-center">
-										<button type="submit" class="btn btn-success btn-block">Save</button>
-									</div>
-								</form>
-							</div>
-						</div>
-					</div>
-				</div>
-				<?php endforeach; ?>
-				<!-- End Modal -->
-
-				<h3 class="mt-5 text-center">Preview</h3>
-
-				<ul class="nav nav-tabs mt-4" role="tablist">
-					<?php foreach ($jadwal as $j) : ?>
+				<ul class="nav nav-tabs" role="tablist">
+					<?php foreach ($konten as $k) : ?>
 					<li class="nav-item">
-
-						<a class="nav-link" href="#day-<?= $j['id_jadwal'] ?>" role="tab" data-toggle="tab"
-							aria-selected="true">Day <?= $j['hari'] ?></a>
+						<a class="nav-link" href="#event-<?= $k['id_event']; ?>" role="tab" data-toggle="tab"
+							aria-selected="true"><?= $k['nama_event']; ?></a>
 					</li>
 					<?php endforeach; ?>
 				</ul>
 
 				<div class="tab-content row justify-content-center">
-					<?php foreach ($jadwal as $j ) : ?>
-					<div role="tabpanel" class="col-lg-9 tab-pane fade" id="day-<?= $j['id_jadwal'] ?>">
-						<?php foreach ($detail_jadwal as $dj ) {
-						if ($j['id_jadwal'] == $dj['id_jadwal']) {
-							if ($dj['gambar'] == null) { ?>
-						<div class="row schedule-item">
-							<div class="col-md-2 mt-3"><time><?= $dj['waktu']; ?></time></div>
-							<div class="col-md-10">
-								<h4><?= $dj['kegiatan']; ?></h4>
-								<p><?= $dj['deskripsi_kegiatan']; ?></p>
-							</div>
-						</div>
-						<?php } else { ?>
-						<div class="row schedule-item">
-							<div class="col-md-2 mt-3"><time><?= $dj['waktu']; ?></time></div>
-							<div class="col-md-10">
-								<div class="guest">
-									<img class="" src="<?= base_url(); ?>assets/img/schedule/<?= $dj['gambar'] ?>">
+					<?php foreach ($konten as $k ) : ?>
+					<!-- Schdule Day 1 -->
+					<div role="tabpanel" class="col-lg-12 tab-pane fade" id="event-<?= $k['id_event'] ?>">
+
+						<?php foreach ($guest as $gs ) {
+						if ($k['id_event'] == $gs['id_event']) { ?>
+						<div class="col-lg-4 col-md-6">
+							<div class="guest">
+								<a href="<?= base_url(); ?>user/lineup/index/<?= $gs['id_guest'] ?>">
+									<img src="<?= base_url(); ?>assets/images/gs/<?= $gs['gambar'] ?>" alt="Speaker 1"
+										class="img-fluid-guest">
+								</a>
+								<div class="details">
+									<h3><a
+											href="<?= base_url('home/lineup'); ?>/<?= $gs['id_guest'] ?>"><?= $gs['nama_guest']; ?></a>
+									</h3>
+									<p><?= $gs['genre']; ?></p>
+									<div class="social">
+										<a href=""><i class="fa fa-twitter"></i></a>
+										<a href=""><i class="fa fa-facebook"></i></a>
+										<a href=""><i class="fa fa-google-plus"></i></a>
+										<a href=""><i class="fa fa-linkedin"></i></a>
+									</div>
 								</div>
-								<h4><?= $dj['kegiatan']; ?></h4>
-								<p><?= $dj['deskripsi_kegiatan']; ?></p>
 							</div>
 						</div>
-						<?php } } }	 ?>
+						<?php } } ?>
 					</div>
+					<!-- End Schdule Day 1 -->
 					<?php endforeach; ?>
 				</div>
-
 			</div>
-
 		</section>
 
-		<!--==========================
+			<!--==========================
     Countdown Section
   	============================-->
 	  <section id="about">
@@ -498,6 +380,220 @@
 				</div>
 			</div>
 		</section>
+
+		<!--==========================
+		Schedule Section
+		============================-->
+		<section id="schedule" class="section-with-bg">
+			<div class="container wow fadeInUp">
+				<div class="section-header">
+					<h2>Event Schedule</h2>
+					<p>Here is our event schedule</p>
+				</div>
+				<div class="row justify-content-center">
+					<div class="col-lg-9">
+						<?php foreach ($konten as $k ) : ?>
+						<table class="table" style="margin-bottom: 0 !important;">
+							<h4 class="text-center mb-4">
+								<?= $k['nama_event'] ?></h4>
+							<thead>
+								<tr>
+									<th>Waktu</th>
+									<th>Kegiatan</th>
+									<th>Deskripsi</th>
+									<th>Gambar</th>
+									<th>Action</th>
+								</tr>
+							</thead>
+							<tbody>
+								<?php foreach ($jadwal as $j ) {
+								if ($k['id_event'] == $j['id_event']) { ?>
+								<tr>
+									<td><?= $j['waktu'] ?></td>
+									<td><?= $j['kegiatan'] ?></td>
+									<td><?= $j['deskripsi_kegiatan'] ?></td>
+									<td>
+										<?php if ($j['gambar']) { ?>
+										<img height="60" width="60" style="border-radius: 30px;"
+											src="<?= base_url(); ?>assets/img/schedule/<?= $j['gambar'] ?>">
+										<?php } else { ?>
+										No Image
+										<?php } ?>
+									</td>
+									<td>
+										<a data-toggle="modal" type="button"
+											data-target="#editDetailJadwal<?= $j['id_jadwal']; ?>">
+											<i class="fa fa-pencil"></i>
+										</a>
+										<a href="<?= base_url(); ?>admin/editable_home/hapusDetailJadwal/<?= $j['id_jadwal'] ?>"
+											onclick="return confirm('Anda yakin ingin menghapus data?')">
+											<i class="fa fa-trash"></i>
+										</a>
+									</td>
+								</tr>
+								<?php }} ?>
+							</tbody>
+						</table>
+						<div class="row justify-content-center">
+							<div class="detail-content col-lg-12 mt-2">
+								<button class="btn btn-outline-danger btn-block" type="button" data-toggle="modal"
+									data-target="#tambahDetailJadwal<?= $k['id_event'] ?>">
+									<i class="fa fa-plus"></i>
+								</button>
+							</div>
+						</div>
+						<?php endforeach; ?>
+					</div>
+				</div>
+				<!-- Modal Edit -->
+				<?php foreach ($jadwal as $j) : ?>
+				<div id="editDetailJadwal<?= $j['id_jadwal']; ?>" class="modal fade">
+					<div class="modal-dialog " role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h4 style="color: navy !important;" class="modal-title">Edit Jadwal</h4>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div class="modal-body">
+								<form method="POST"
+									action="<?= base_url();?>admin/editable_home/editDetailJadwal/<?= $j ['id_jadwal']; ?>"
+									enctype="multipart/form-data">
+									<div class="form-group">
+										<input type="datetime-local" class="form-control" name="waktu"
+											value="<?= $j['waktu']; ?>">
+									</div>
+									<div class="form-group">
+										<input type="text" class="form-control" name="kegiatan"
+											value="<?= $j['kegiatan']; ?>">
+									</div>
+									<div class="form-group">
+										<textarea type="text" class="form-control"
+											name="deskripsi_kegiatan"><?= $j['deskripsi_kegiatan']; ?></textarea>
+									</div>
+									<div class="form-group">
+										<label class="text-dark">Gambar</label>
+										<input type="file" name="fotopost" class="form-control-file text-dark">
+										<span class="text-danger mt-2">Before: <?= $j['gambar']; ?></span>
+									</div>
+									<div class="text-center">
+										<button type="submit" class="btn btn-success btn-block">Save</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+				<?php endforeach; ?>
+				<!-- End Modal -->
+
+				<!-- Tambah Schedule -->
+				<?php foreach ($konten as $k) : ?>
+				<div id="tambahDetailJadwal<?= $k['id_event'] ?>" class="modal fade">
+					<div class="modal-dialog " role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h4 style="color: navy !important;" class="modal-title">Tambah Jadwal <?= $k['nama_event'] ?>
+								</h4>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div class="modal-body">
+								<form method="POST"
+									action="<?= base_url('admin/editable_home/tambahDetailJadwal/'. $j['id_jadwal'] )?>"
+									enctype="multipart/form-data">
+									<div class="form-group">
+										<input type="datetime-local" class="form-control" name="waktu" placeholder="Waktu">
+									</div>
+									<div class="form-group">
+										<input type="text" class="form-control" name="kegiatan" placeholder="Kegiatan">
+									</div>
+									<div class="form-group">
+										<textarea type="text" class="form-control" name="deskripsi_kegiatan"
+											placeholder="Deskripsi"></textarea>
+									</div>
+									<div class="form-group">
+										<label class="text-dark">Gambar</label>
+										<input type="file" name="fotopost" class="form-control-file mb-3 text-dark">
+									</div>
+									<div class="text-center">
+										<button type="submit" class="btn btn-success btn-block">Save</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+				<?php endforeach; ?>
+				<!-- End Modal -->
+
+				<h3 class="mt-5 mb-5 text-center">Preview</h3>
+						<ul class="nav nav-tabs" role="tablist">
+							<?php foreach ($konten as $k) : ?>
+							<li class="nav-item">
+								<a class="nav-link" href="#day-<?= $k['id_event'] ?>" role="tab" data-toggle="tab"
+									aria-selected="true"><?= $k['nama_event'] ?></a>
+							</li>
+							<?php endforeach; ?>
+						</ul>
+
+						<div class="tab-content row justify-content-center">
+							<?php foreach ($konten as $k ) : ?>
+							<!-- Schdule Day 1 -->
+							<div role="tabpanel" class="col-lg-9 tab-pane fade" id="day-<?= $k['id_event'] ?>">
+
+								<?php foreach ($jadwal as $j ) {
+							if ($j['id_event'] == $k['id_event']) {
+							if ($j['gambar'] == null) { ?>
+								<div class="row schedule-item">
+									<div class="col-md-2">
+										<time>
+											<?php
+										$time = date_create($j['waktu']);
+										$waktu = date_format($time, 'd M Y H:s');
+										echo $waktu;
+									?>
+										</time>
+									</div>
+									<div class="col-md-10">
+										<h4><?= $j['kegiatan']; ?></h4>
+										<p><?= $j['deskripsi_kegiatan']; ?></p>
+									</div>
+								</div>
+								<?php } else { ?>
+								<div class="row schedule-item">
+									<div class="col-md-2 mt-3">
+										<time>
+											<?php
+										$time = date_create($j['waktu']);
+										$waktu = date_format($time, 'd M Y H:s');
+										echo $waktu;
+									?>
+										</time>
+									</div>
+									<div class="col-md-10">
+										<div class="guest">
+											<img class=""
+												src="<?= base_url(); ?>assets/img/schedule/<?= $j['gambar'] ?>">
+										</div>
+										<h4><?= $j['kegiatan']; ?></h4>
+										<p><?= $j['deskripsi_kegiatan']; ?></p>
+									</div>
+								</div>
+								<?php } } }	 ?>
+							</div>
+
+							<!-- End Schdule Day 1 -->
+							<?php endforeach; ?>
+						</div>
+			
+			</div>
+
+		</section>
+
+	
 
 		<!--==========================
 		Venue Section
@@ -527,43 +623,69 @@
 		<!--==========================
 		Buy Ticket Section
 		============================-->
-		<section id="buy-tickets" class="section-with-bg wow fadeInUp">
-			<div class="container">
+		<section id="buy-tickets" class="wow fadeInUp section-with-bg">
+			<div class="container mt-5">
+
 				<div class="section-header">
 					<h2>Buy Tickets</h2>
 					<p>Buy the ticket and join the festival.</p>
 				</div>
+
 				<div class="row">
-					<?php foreach ($tiket as $tkt ) : 
-					if ($tkt < 2) { ?>
-					<div class="col-lg-12 mt-3">
-						<div class="tiket">
-							<?= $tkt['kelas']; ?> <br>
-							<?= $tkt['harga']; ?> <br>
-							<button type="button" class="btn btn-outline-primary mt-2" data-toggle="modal"
-								data-target="#buy-ticket-modal<?= $tkt['id_tiket'] ?>">
-								Beli
-							</button>
+					
+					<?php foreach ($konten as $k ) :
+					if ($k < 2) { ?>
+					<div class="tiket col-lg-12">
+						<div class="mb-1 mt-5">
+							<div class="row tiket-event-name mt-5" style="display: block;">
+								<h1><?= $k['nama_event']; ?></h1>
+							</div>
+							<div class="row mt-3 tiket-kelas">
+								<ul>
+									<?php foreach ($kelas as $kel) { 
+									if ($k['id_event'] == $kel['id_event']) { ?>
+									<li><?= $kel['kelas']; ?></li>
+									<?php }} ?>
+								</ul>
+							</div>
+							<div class="row tiket-button mt-3">
+								<button type="button" class="btn btn-block btn-outline-primary" data-toggle="modal"
+									data-target="#buy-ticket-modal<?= $k['id_event'] ?>">
+									more
+								</button>
+							</div>
 						</div>
 					</div>
 					<?php } else { ?>
-					<div class="col-lg-6 mt-3">
-						<div class="tiket">
-							<?= $tkt['kelas']; ?> <br>
-							<?= $tkt['harga']; ?> <br>
-							<button type="button" class="btn btn-outline-primary mt-2" data-toggle="modal"
-								data-target="#buy-ticket-modal<?= $tkt['id_tiket'] ?>">
-								Beli
-							</button>
+					<div class="tiket col-lg-6">
+						<div class="mb-1">
+							<div class="row tiket-event-name" style="display: block;">
+								<p><?= $k['nama_event']; ?></p>
+							</div>
+							<div class="row mt-3 tiket-kelas">
+								<ul>
+									<?php foreach ($kelas as $kel) { 
+									if ($k['id_event'] == $kel['id_event']) { ?>
+									<li><?= $kel['kelas']; ?></li>
+									<?php }} ?>
+								</ul>
+							</div>
+							<div class="row tiket-button mt-3">
+								<button type="button" class="btn btn-block btn-outline-primary" data-toggle="modal"
+									data-target="#buy-ticket-modal<?= $k['id_event'] ?>">
+									more
+								</button>
+							</div>
 						</div>
 					</div>
 					<?php } endforeach; ?>
 				</div>
+
 			</div>
-			<?php foreach ($tiket as $tkt) : ?>
+			<?php foreach ($konten as $k) : ?>
 
 			<!-- Modal Order Form -->
-			<div id="buy-ticket-modal<?= $tkt['id_tiket'] ?>" class="modal fade">
+			<div id="buy-ticket-modal<?= $k['id_event'] ?>" class="modal fade">
 				<div class="modal-dialog " role="document">
 					<div class="modal-content">
 						<div class="modal-header">
@@ -573,7 +695,24 @@
 							</button>
 						</div>
 						<div class="modal-body">
-							<form method="POST" action="<?= base_url('home/add_item/'.$tkt['id_tiket']) ?>">
+							<form method="POST" action="<?= base_url('home/add_item') ?>">
+								<div class="mb-3">
+									<select name="kelas" class="form-control">
+										<option value="">Pilih Tiket</option>
+										<?php foreach ($kelas as $kel) : ?>
+										<option value="<?= $kel['id_tiket'] ?>" <?php $tiket = 'checked'; ?>><?= $kel['kelas']; ?></option>
+										<?php endforeach; ?>
+									</select>
+								</div>
+								<div class="mb-3">
+									<select name="keterangan" class="form-control">
+										<option value="">Pilih Akses</option>
+										<?php foreach ($kelas as $kls) {
+											if ($kls['id_ticket'] == $tiket) { ?>
+												<option value=""><?= $kel['tipe']; ?> Day</option>
+										<?php }} ?>
+									</select>
+								</div>
 								<div>
 									<small class="mb-2 text-danger">*Maksimal pembelian 5 tiket</small>
 									<input class="form-control mb-3" placeholder="Masukan Jumlah Tiket" type="number"
@@ -584,11 +723,11 @@
 								</div>
 							</form>
 						</div>
-					</div>
-				</div>
-			</div>
-			<!-- End Modal -->
-			<?php endforeach; ?>
+					</div><!-- /.modal-content -->
+				</div><!-- /.modal-dialog -->
+			</div><!-- /.modal -->
+			<?php ;endforeach ?>
+
 		</section>
 
 		<!--==========================
@@ -675,7 +814,8 @@
 								<form method="POST" action="<?= base_url('admin/editable_home/tambah_sponsor')?>"
 									enctype="multipart/form-data">
 									<div class="form-group">
-										<input type="text" name="nama_sponsor" class="form-control" placeholder="Nama Sponsor" required>
+										<input type="text" name="nama_sponsor" class="form-control"
+											placeholder="Nama Sponsor" required>
 									</div>
 									<div class="form-group">
 										<label class="text-dark">Logo Sponsor</label>
@@ -703,7 +843,8 @@
 								</button>
 							</div>
 							<div class="modal-body">
-								<form method="POST" action="<?= base_url('admin/editable_home/edit_sponsor/'. $s['id_sponsor'])?>"
+								<form method="POST"
+									action="<?= base_url('admin/editable_home/edit_sponsor/'. $s['id_sponsor'])?>"
 									enctype="multipart/form-data">
 									<div class="form-group">
 										<input type="text" name="nama_sponsor" class="form-control"
@@ -711,8 +852,10 @@
 									</div>
 									<div class="form-group">
 										<label class="text-dark">Logo Sponsor</label>
-										<input type="file" name="fotopost"  class="form-control-file">
-										<img class="mt-3" height="100" weidth="100" src="<?= base_url(); ?>assets/img/sponsor/<?= $s['logo_sponsor']; ?>" alt="">
+										<input type="file" name="fotopost" class="form-control-file text-dark">
+										<img class="mt-3" height="100" weidth="100"
+											src="<?= base_url(); ?>assets/img/sponsor/<?= $s['logo_sponsor']; ?>"
+											alt="">
 									</div>
 
 									<div class="text-center">
@@ -932,41 +1075,41 @@
 		$tampil = date_format($date, "d M Y");
 		echo '<div style="display: none;" id="tanggal">'.$tampil.'</div>';
 	?>
-	<script type="text/javascript">
-		var tanggal = document.getElementById('tanggal').innerHTML;
-		var countDate = new Date(tanggal).getTime();
+		<script type="text/javascript">
+			var tanggal = document.getElementById('tanggal').innerHTML;
+			var countDate = new Date(tanggal).getTime();
 
-		function countdown() {
-			var now = new Date().getTime();
-			gap = countDate - now;
+			function countdown() {
+				var now = new Date().getTime();
+				gap = countDate - now;
 
-			var detik = 1000;
-			var menit = detik * 60;
-			var jam = menit * 60;
-			var hari = jam * 24;
+				var detik = 1000;
+				var menit = detik * 60;
+				var jam = menit * 60;
+				var hari = jam * 24;
 
-			var h = Math.floor(gap / (hari));
-			var j = Math.floor((gap % (hari)) / (jam));
-			var m = Math.floor((gap % (jam)) / (menit));
-			var d = Math.floor((gap % (menit)) / (detik));
+				var h = Math.floor(gap / (hari));
+				var j = Math.floor((gap % (hari)) / (jam));
+				var m = Math.floor((gap % (jam)) / (menit));
+				var d = Math.floor((gap % (menit)) / (detik));
 
-			document.getElementById('hari').innerText = h;
-			document.getElementById('jam').innerText = j;
-			document.getElementById('menit').innerText = m;
-			document.getElementById('detik').innerText = d;
+				document.getElementById('hari').innerText = h;
+				document.getElementById('jam').innerText = j;
+				document.getElementById('menit').innerText = m;
+				document.getElementById('detik').innerText = d;
 
-			var kondisi = parseInt(h) == 0 && parseInt(j) == 0 && parseInt(m) == 0 && parseInt(d) == 0
+				var kondisi = parseInt(h) == 0 && parseInt(j) == 0 && parseInt(m) == 0 && parseInt(d) == 0
 
-			if(kondisi){
-				clearInterval(start);
+				if (kondisi) {
+					clearInterval(start);
+				}
 			}
-		}
 
-		var start = setInterval(function(){
-			countdown();
-		}, 1000);
+			var start = setInterval(function () {
+				countdown();
+			}, 1000);
 
-	</script>
+		</script>
 
 		<!-- JavaScript Libraries -->
 		<script src="<?= base_url(); ?>assets/lib/jquery/jquery.min.js"></script>
